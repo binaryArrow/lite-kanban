@@ -1,0 +1,5 @@
+<div class="flex h-full flex-wrap gap-5 overflow-auto">
+  <ticket-container *ngFor="let container of containers"></ticket-container>
+<button class="bg-container hover:bg-containerHover rounded w-6" (click)="addNewContainer()">+</button>
+</div>
+
