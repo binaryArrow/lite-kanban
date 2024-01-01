@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { BoardComponent } from './board.component';
+import {BoardComponent} from './board.component';
 
 describe('BoardComponent', () => {
   let component: BoardComponent;
@@ -10,8 +10,8 @@ describe('BoardComponent', () => {
     await TestBed.configureTestingModule({
       imports: [BoardComponent]
     })
-    .compileComponents();
-    
+      .compileComponents();
+
     fixture = TestBed.createComponent(BoardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -19,5 +19,12 @@ describe('BoardComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should have two containers', async () => {
+    fixture.detectChanges();
+    component.ngOnInit().then(() => {
+      expect(component.containers.length).toBeGreaterThanOrEqual(2);
+    })
   });
 });

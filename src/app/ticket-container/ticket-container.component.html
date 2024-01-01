@@ -1,3 +1,15 @@
-<div class="h-full w-72 bg-container rounded">
-
+<div
+  cdkDropList
+  [cdkDropListData]="tickets"
+  class="ticket-container h-full w-72 bg-container rounded overflow-auto"
+  (cdkDropListDropped)="drop($event)">
+  <input (keyup.enter)="modelChanged()" #titleInput class="title_input border-b-2 bg-container focus:outline-none border-containerHover2 focus:border-containerHover3" (focusout)="modelChanged()" type="text" [(ngModel)]="model.title">
+  <div>
+    <button class="m-2  hover:bg-containerHover rounded text-center" (click)="addNewTicket()">
+      <fa-icon [icon]="faPlus"></fa-icon>
+    </button>
+    @for (ticket of tickets; track ticket.id) {
+      <ticket class="ticket-wrapper" [ticketModel]="ticket" cdkDrag></ticket>
+    }
+  </div>
 </div>
