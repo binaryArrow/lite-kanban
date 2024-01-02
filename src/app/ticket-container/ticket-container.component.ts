@@ -3,12 +3,13 @@ import {TicketContainerModel} from "../../models/TicketContainerModel";
 import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem} from "@angular/cdk/drag-drop";
 import {severities, TicketModel} from "../../models/TicketModel";
 import {DbService} from "../services/DbService";
-import {faPlus} from "@fortawesome/free-solid-svg-icons";
+import {faEllipsisV, faPlus, faTrash, faX} from "@fortawesome/free-solid-svg-icons";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {FormsModule} from "@angular/forms";
 import {MatInputModule} from "@angular/material/input";
 import {TicketComponent} from "../ticket/ticket.component";
-import {NgIf} from "@angular/common";
+import {NgForOf, NgIf} from "@angular/common";
+import {MatMenuModule} from "@angular/material/menu";
 
 @Component({
   selector: 'ticket-container',
@@ -20,7 +21,9 @@ import {NgIf} from "@angular/common";
     FormsModule,
     MatInputModule,
     TicketComponent,
-    NgIf
+    NgIf,
+    NgForOf,
+    MatMenuModule
   ],
   templateUrl: './ticket-container.component.html',
   styleUrl: './ticket-container.component.scss',
@@ -30,11 +33,18 @@ import {NgIf} from "@angular/common";
 })
 export class TicketContainerComponent implements OnInit {
   @Input() model: TicketContainerModel = {title: 'NEW', id: 0}
+  @Input() ticketContainers: TicketContainerModel[] = []
   @ViewChild('titleInput') titleInput!: ElementRef<HTMLInputElement>
   @ViewChild('dialog') dialog!: ElementRef<HTMLDialogElement>
+  @ViewChild('deleteConfirmationDialog') deleteConfirmationDialog!: ElementRef<HTMLDialogElement>
   @ViewChild('ticketTitleInput') ticketTitleInput!: ElementRef<HTMLInputElement>
-  private dbService: DbService;
   protected readonly faPlus = faPlus;
+  protected readonly severities = severities;
+  protected readonly faX = faX;
+  protected readonly faEllipsisV = faEllipsisV;
+  protected readonly faTrash = faTrash;
+  private dbService: DbService;
+  protected showConfirmation = false;
   tickets: TicketModel[] = []
   openTicket: TicketModel | undefined = {
     id: 0,
@@ -53,6 +63,7 @@ export class TicketContainerComponent implements OnInit {
   async ngOnInit() {
     await this.dbService.initDB()
     this.tickets = await this.dbService.getTicketsForContainer(this.model.id)
+    this.tickets.sort((a, b) => a.index - b.index)
   }
 
   showModal(event: { show: boolean; ticketId: number }) {
@@ -76,8 +87,11 @@ export class TicketContainerComponent implements OnInit {
         );
       }
     }
-    console.log(event)
-    console.log(this.model.id)
+    this.tickets.forEach(async (ticket, index) => {
+      ticket.index = index
+      ticket.containerId = this.model.id
+      await this.dbService.putTicket(ticket)
+    })
   }
 
   addNewTicket() {
@@ -96,6 +110,41 @@ export class TicketContainerComponent implements OnInit {
   saveTicket() {
     if (this.openTicket) {
       this.dbService.putTicket(this.openTicket).then()
+    }
+  }
+
+  closeModal() {
+    this.dialog.nativeElement.close()
+    this.showConfirmation = false
+  }
+
+
+  deleteTicket() {
+    if (this.openTicket) {
+      const foundInTickets = this.tickets.find(ticket => ticket.id === this.openTicket!!.id)
+      if (foundInTickets) {
+        this.dbService.deleteTicket(this.openTicket.id).then(() => {
+          this.tickets?.splice(this.tickets.indexOf(foundInTickets), 1)
+          this.dialog.nativeElement.close()
+          this.showConfirmation = false
+        })
+      }
+    }
+  }
+
+  showContainerDeleteConfirmation() {
+    this.deleteConfirmationDialog.nativeElement.showModal()
+  }
+
+  async deleteContainer() {
+    if (this.ticketContainers.length > 2) {
+      for (const ticket of this.tickets) {
+        await this.dbService.deleteTicket(ticket.id)
+      }
+      this.dbService.deleteTicketContainer(this.model.id).then(() => {
+        this.ticketContainers.splice(this.ticketContainers.indexOf(this.model), 1)
+      })
+      this.deleteConfirmationDialog.nativeElement.close()
     }
   }
 }

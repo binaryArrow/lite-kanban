@@ -7,12 +7,13 @@ import {Injectable} from "@angular/core";
 @Injectable()
 export class DbService {
     db: any
+    DB_VERSION = 1
     async initDB() {
         if (!('indexedDB' in window)) {
             alert("This browser doesn't support IndexedDB.");
             return;
         } else {
-            this.db = await openDB('Canban', 1, {
+            this.db = await openDB('Canban', this.DB_VERSION, {
                 upgrade(db) {
                     const ticketContainerStore = db.createObjectStore('ticketContainers', {
                         keyPath: 'id',
@@ -40,7 +41,7 @@ export class DbService {
     }
 
     async addNewTicketContainer() {
-        const db = await openDB('Canban', 1)
+        const db = await openDB('Canban', this.DB_VERSION)
         const container = {
             title: 'NEW'
         } as TicketContainerModel
@@ -52,12 +53,17 @@ export class DbService {
     }
 
     async putTicketContainer(model: TicketContainerModel) {
-        const db = await openDB('Canban', 1)
+        const db = await openDB('Canban', this.DB_VERSION)
         await db.put('ticketContainers', {title: model.title, id: model.id})
     }
 
+    async deleteTicketContainer(containerId: number) {
+      const db = await openDB('Canban', 1)
+      await db.delete('ticketContainers', containerId)
+    }
+
     async putTicket(model: TicketModel) {
-        const db = await openDB('Canban', 1)
+        const db = await openDB('Canban', this.DB_VERSION)
         await db.put('tickets', {
             title: model.title,
             id: model.id,
@@ -76,12 +82,12 @@ export class DbService {
         return await this.db.getFromIndex('ticketContainers', 'id', id)
     }
     async getTicketById(id: number) {
-        const db = await openDB('Canban', 1)
+        const db = await openDB('Canban', this.DB_VERSION)
         return await db.getFromIndex('tickets', 'id', id) as TicketModel
     }
 
     async addNewTicket(containerId: number) {
-        const db = await openDB('Canban', 1)
+        const db = await openDB('Canban', this.DB_VERSION)
         const ticket = {
             title: 'new ticket',
             containerId: containerId,
@@ -98,12 +104,12 @@ export class DbService {
     }
 
     async deleteTicket(ticketId: number) {
-        const db = await openDB('Canban', 1)
+        const db = await openDB('Canban', this.DB_VERSION)
         return await db.delete('tickets', ticketId)
     }
 
     async getTicketsForContainer(containerId: number) {
-        const db = await openDB('Canban', 1)
+        const db = await openDB('Canban', this.DB_VERSION)
         return await db.getAllFromIndex('tickets', 'containerId', containerId).then((res) => {
             return res as TicketModel[]
         })

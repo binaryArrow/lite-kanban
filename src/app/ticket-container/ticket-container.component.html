@@ -3,9 +3,24 @@
   [cdkDropListData]="tickets"
   class="ticket-container h-full w-72 bg-container rounded overflow-auto"
   (cdkDropListDropped)="drop($event)">
-  <input (keyup.enter)="modelChanged()" #titleInput
-         class="title_input border-b-2 bg-container focus:outline-none border-containerHover2 focus:border-containerHover3"
-         (focusout)="modelChanged()" type="text" [(ngModel)]="model.title">
+  <div class="flex">
+    <input (keyup.enter)="modelChanged()" #titleInput
+           class="title_input border-b-2 bg-container focus:outline-none border-containerHover2 focus:border-containerHover3"
+           (focusout)="modelChanged()" type="text" [(ngModel)]="model.title">
+    <button class="fa_icon_scaling p-2" [matMenuTriggerFor]="menu">
+      <fa-icon [icon]="faEllipsisV"/>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="showContainerDeleteConfirmation()">Delete</button>
+    </mat-menu>
+  </div>
+  <dialog #deleteConfirmationDialog class="w-64 h-16 bg-containerHover overflow-hidden">
+    Delete Container?
+    <div>
+      <button *ngIf="ticketContainers.length > 2" class="bg-containerHover hover:bg-containerHover2" (click)="deleteContainer()">Yes</button>
+      <button class="bg-containerHover hover:bg-containerHover2 m-2" (click)="deleteConfirmationDialog.close()">No</button>
+    </div>
+  </dialog>
   <div>
     <button class="m-2 hover:bg-containerHover rounded text-center" (click)="addNewTicket()">
       <fa-icon [icon]="faPlus"></fa-icon>
@@ -15,17 +30,38 @@
     }
   </div>
 
-  <dialog #dialog class="ticket_dialog bg-container">
+  <dialog #dialog class="ticket_dialog bg-container" (close)="closeModal()">
     <div class="grid grid-cols-3">
-      <input #ticketTitleInput class="ml-3 mb-2 border-b-2 bg-container focus:outline-none border-containerHover2 focus:border-containerHover3
-      col-span-2 text-center" spellcheck="false"
+      <input #ticketTitleInput
+             class="ml-3 mb-2 border-b-2 bg-container focus:outline-none border-containerHover2 focus:border-containerHover3 col-span-2 text-center"
+             spellcheck="false"
              (focusout)="saveTicket()" (keyup.enter)="saveTicket()"
              [(ngModel)]="openTicket!!.title">
-      <textarea class="col-start-1 col-span-2 ml-3 col
-      bg-containerHover
- outline-none rounded p-2 border-b-2 bg-container focus:outline-none border-containerHover2 focus:border-containerHover3"
-                rows="25" spellcheck="false"
-                [(ngModel)]="openTicket!!.description" (focusout)="saveTicket()"></textarea>
+      <textarea
+        class="col-start-1 col-span-2 ml-3 col bg-containerHover outline-none rounded p-2 border-b-2 focus:outline-none border-containerHover2 focus:border-containerHover3"
+        rows="25" spellcheck="false"
+        [(ngModel)]="openTicket!!.description" (focusout)="saveTicket()"></textarea>
+      <div>
+        <div>Creation: {{ openTicket!!.createDate }}</div>
+        <label for="severity">Severity </label>
+        <select id="severity" class="mt-5 bg-containerHover" [(ngModel)]="openTicket!!.severity"
+                (change)="saveTicket()">
+          <option *ngFor="let severity of severities" [value]="severity">{{ severity }}</option>
+        </select>
+      </div>
+    </div>
+    <button class="fa_icon_scaling absolute float-right top-1 right-3" (click)="closeModal()">
+      <fa-icon [icon]="faX"/>
+    </button>
+    <button class="fa_icon_scaling absolute bottom-0 right-0 mb-2 mr-2" (click)="showConfirmation = true">
+      <fa-icon [icon]="faTrash"/>
+    </button>
+    <div *ngIf="showConfirmation" class="confirm_dialog bg-containerHover absolute bottom-3 right-10">
+      Delete Ticket?
+      <div>
+        <button class="bg-containerHover hover:bg-containerHover2" (click)="deleteTicket()">Yes</button>
+        <button class="bg-containerHover hover:bg-containerHover2 m-2" (click)="showConfirmation = false">No</button>
+      </div>
     </div>
   </dialog>
 
