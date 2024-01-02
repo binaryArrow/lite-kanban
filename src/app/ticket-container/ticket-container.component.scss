@@ -24,3 +24,9 @@
   margin-bottom: 5px;
   color: white;
 }
+
+.ticket_dialog::backdrop {
+  background-color: #3c3c3c;
+  opacity: 0.7;
+  border: none;
+}

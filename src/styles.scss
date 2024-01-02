@@ -28,11 +28,22 @@ body{
   border-radius: 3px;
   height: 50px;
   margin: auto auto 10px;
-  width: 90%;
+  width: 96%;
   display: block;
   position: relative;
   text-align: center;
 }
 .ticket-wrapper:hover {
   cursor: pointer;
+}
+dialog {
+  width: 80%;
+  height: 80%;
+  box-shadow: 0 4px 5px rgb(0 0 0 / 30%);
+  border: 2px solid #6b6b6b;
+  border-radius: 5px;
+}
+
+textarea{
+  resize: none;
 }

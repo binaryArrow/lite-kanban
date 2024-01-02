@@ -3,13 +3,30 @@
   [cdkDropListData]="tickets"
   class="ticket-container h-full w-72 bg-container rounded overflow-auto"
   (cdkDropListDropped)="drop($event)">
-  <input (keyup.enter)="modelChanged()" #titleInput class="title_input border-b-2 bg-container focus:outline-none border-containerHover2 focus:border-containerHover3" (focusout)="modelChanged()" type="text" [(ngModel)]="model.title">
+  <input (keyup.enter)="modelChanged()" #titleInput
+         class="title_input border-b-2 bg-container focus:outline-none border-containerHover2 focus:border-containerHover3"
+         (focusout)="modelChanged()" type="text" [(ngModel)]="model.title">
   <div>
-    <button class="m-2  hover:bg-containerHover rounded text-center" (click)="addNewTicket()">
+    <button class="m-2 hover:bg-containerHover rounded text-center" (click)="addNewTicket()">
       <fa-icon [icon]="faPlus"></fa-icon>
     </button>
     @for (ticket of tickets; track ticket.id) {
-      <ticket class="ticket-wrapper" [ticketModel]="ticket" cdkDrag></ticket>
+      <ticket (showModalEvent)="showModal($event)" class="ticket-wrapper" [ticketModel]="ticket" cdkDrag></ticket>
     }
   </div>
+
+  <dialog #dialog class="ticket_dialog bg-container">
+    <div class="grid grid-cols-3">
+      <input #ticketTitleInput class="ml-3 mb-2 border-b-2 bg-container focus:outline-none border-containerHover2 focus:border-containerHover3
+      col-span-2 text-center" spellcheck="false"
+             (focusout)="saveTicket()" (keyup.enter)="saveTicket()"
+             [(ngModel)]="openTicket!!.title">
+      <textarea class="col-start-1 col-span-2 ml-3 col
+      bg-containerHover
+ outline-none rounded p-2 border-b-2 bg-container focus:outline-none border-containerHover2 focus:border-containerHover3"
+                rows="25" spellcheck="false"
+                [(ngModel)]="openTicket!!.description" (focusout)="saveTicket()"></textarea>
+    </div>
+  </dialog>
+
 </div>
