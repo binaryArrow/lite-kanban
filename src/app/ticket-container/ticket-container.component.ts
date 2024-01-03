@@ -95,9 +95,11 @@ export class TicketContainerComponent implements OnInit {
   }
 
   addNewTicket() {
-    this.dbService.addNewTicket(this.model.id).then(res => {
-      if (res) {
-        this.tickets.push(res)
+    this.dbService.addNewTicket(this.model.id).then(async response => {
+      this.tickets.unshift(response as TicketModel)
+      for (let i = 1; i < this.tickets.length; i++) {
+        this.tickets[i].index = i
+        await this.dbService.putTicket(this.tickets[i])
       }
     })
   }
