@@ -36,9 +36,7 @@ body{
 .ticket-wrapper:hover {
   cursor: pointer;
 }
-dialog {
-  width: 80%;
-  height: 80%;
+.delete-dialog {
   box-shadow: 0 4px 5px rgb(0 0 0 / 30%);
   border: 2px solid #6b6b6b;
   border-radius: 5px;

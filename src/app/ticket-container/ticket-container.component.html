@@ -14,11 +14,15 @@
       <button mat-menu-item (click)="showContainerDeleteConfirmation()">Delete</button>
     </mat-menu>
   </div>
-  <dialog #deleteConfirmationDialog class="w-64 h-16 bg-containerHover overflow-hidden">
-    Delete Container?
+  <dialog #deleteConfirmationDialog class="delete-dialog w-64 h-16 bg-containerHover overflow-hidden"
+          (click)="closeDialogWithClickOutside($event, deleteConfirmationDialog)">
     <div>
-      <button *ngIf="ticketContainers.length > 2" class="bg-containerHover hover:bg-containerHover2" (click)="deleteContainer()">Yes</button>
-      <button class="bg-containerHover hover:bg-containerHover2 m-2" (click)="deleteConfirmationDialog.close()">No</button>
+      <h3> Delete Container?</h3>
+      <button *ngIf="ticketContainers.length > 2" class="bg-containerHover hover:bg-containerHover2"
+              (click)="deleteContainer()">Yes
+      </button>
+      <button class="bg-containerHover hover:bg-containerHover2 m-2" (click)="deleteConfirmationDialog.close()">No
+      </button>
     </div>
   </dialog>
   <div>
@@ -30,7 +34,8 @@
     }
   </div>
 
-  <dialog #dialog class="ticket_dialog bg-container" (close)="closeModal()">
+  <dialog #dialog class="delete-dialog bg-container" (close)="closeModal()"
+          (click)="closeDialogWithClickOutside($event, dialog)">
     <div class="grid grid-cols-3">
       <input #ticketTitleInput
              class="ml-3 mb-2 border-b-2 bg-container focus:outline-none border-containerHover2 focus:border-containerHover3 col-span-2 text-center"
@@ -38,11 +43,11 @@
              (focusout)="saveTicket()" (keyup.enter)="saveTicket()"
              [(ngModel)]="openTicket!!.title">
       <textarea
-        class="col-start-1 col-span-2 ml-3 col bg-containerHover outline-none rounded p-2 border-b-2 focus:outline-none border-containerHover2 focus:border-containerHover3"
+        class="col-start-1 col-span-2 m-3 col bg-containerHover outline-none rounded p-2 border-b-2 focus:outline-none border-containerHover2 focus:border-containerHover3"
         rows="25" spellcheck="false"
         [(ngModel)]="openTicket!!.description" (focusout)="saveTicket()"></textarea>
       <div>
-        <div>Creation: {{ openTicket!!.createDate }}</div>
+        <div class="p-1">Creation: {{ openTicket!!.createDate }}</div>
         <label for="severity">Severity </label>
         <select id="severity" class="mt-5 bg-containerHover" [(ngModel)]="openTicket!!.severity"
                 (change)="saveTicket()">
@@ -50,9 +55,6 @@
         </select>
       </div>
     </div>
-    <button class="fa_icon_scaling absolute float-right top-1 right-3" (click)="closeModal()">
-      <fa-icon [icon]="faX"/>
-    </button>
     <button class="fa_icon_scaling absolute bottom-0 right-0 mb-2 mr-2" (click)="showConfirmation = true">
       <fa-icon [icon]="faTrash"/>
     </button>

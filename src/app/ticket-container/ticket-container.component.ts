@@ -149,4 +149,10 @@ export class TicketContainerComponent implements OnInit {
       this.deleteConfirmationDialog.nativeElement.close()
     }
   }
+
+  closeDialogWithClickOutside(event: MouseEvent, element: HTMLDialogElement) {
+    if(event.target === element) {
+      element.close()
+    }
+  }
 }
