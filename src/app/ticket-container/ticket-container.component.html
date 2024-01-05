@@ -36,9 +36,9 @@
 
   <dialog #dialog class="delete-dialog bg-container" (close)="closeModal()"
           (click)="closeDialogWithClickOutside($event, dialog)">
-    <div class="grid grid-cols-3">
+    <div class="grid grid-cols-3 w-[800px]">
       <input #ticketTitleInput
-             class="ml-3 mb-2 border-b-2 bg-container focus:outline-none border-containerHover2 focus:border-containerHover3 col-span-2 text-center"
+             class="ml-3 mb-2 mr-3 border-b-2 bg-container focus:outline-none border-containerHover2 focus:border-containerHover3 col-span-2 text-center"
              spellcheck="false"
              (focusout)="saveTicket()" (keyup.enter)="saveTicket()"
              [(ngModel)]="openTicket!!.title">

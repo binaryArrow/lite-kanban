@@ -25,11 +25,13 @@ body{
 }
 
 .ticket-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border-radius: 3px;
   height: 50px;
   margin: auto auto 10px;
   width: 96%;
-  display: block;
   position: relative;
   text-align: center;
 }
