@@ -1,7 +1,4 @@
-export interface TicketContainerModel {
-  id: number
-  title: string
-  projectId: number
+export interface  TicketContainerModel {
+    id: number
+    title: string
 }
-
-export const indexes = ['id', 'projectId']

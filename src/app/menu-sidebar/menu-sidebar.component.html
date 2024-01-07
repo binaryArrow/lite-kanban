@@ -7,12 +7,9 @@
   </mat-sidenav>
 
   <mat-sidenav-content>
-    <mat-toolbar class="toolbar">
-      <button class="fa_icon_scaling pr-2" (click)="sidenav.toggle()">
-        <fa-icon [icon]="faBars"></fa-icon>
-      </button>
-      <span class="text-xl">New Project</span>
-    </mat-toolbar>
+    <button class="h-3/4 float-left bg-container hover:bg-containerHover rounded p-0.5 mr-5 text-center" (click)="sidenav.toggle()">
+      <fa-icon [icon]="faCompass"/>
+    </button>
     <div class="h-3/4">
       <board></board>
     </div>

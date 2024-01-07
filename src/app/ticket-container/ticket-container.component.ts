@@ -32,7 +32,7 @@ import {MatMenuModule} from "@angular/material/menu";
   ]
 })
 export class TicketContainerComponent implements OnInit {
-  @Input() model: TicketContainerModel = {title: 'NEW', id: 0, projectId: 0}
+  @Input() model: TicketContainerModel = {title: 'NEW', id: 0}
   @Input() ticketContainers: TicketContainerModel[] = []
   @ViewChild('titleInput') titleInput!: ElementRef<HTMLInputElement>
   @ViewChild('dialog') dialog!: ElementRef<HTMLDialogElement>
