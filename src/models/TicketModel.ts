@@ -16,3 +16,5 @@ export const severities = [
     'High',
     'Highest'
 ]
+
+export const indexes = ['id', 'containerId']

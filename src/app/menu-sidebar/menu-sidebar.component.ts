@@ -7,7 +7,7 @@ import {MatButtonModule} from "@angular/material/button";
 import {RouterLink, RouterLinkActive} from "@angular/router";
 import {BoardComponent} from "../board/board.component";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
-import {faCompass} from "@fortawesome/free-solid-svg-icons";
+import {faBars} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'menu-sidebar',
@@ -27,5 +27,5 @@ import {faCompass} from "@fortawesome/free-solid-svg-icons";
   styleUrl: './menu-sidebar.component.scss'
 })
 export class MenuSidebarComponent {
-  protected readonly faCompass = faCompass;
+  protected readonly faBars = faBars;
 }

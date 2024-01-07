@@ -1,7 +1,7 @@
 <div
   cdkDropList
   [cdkDropListData]="tickets"
-  class="ticket-container h-full w-72 bg-container rounded overflow-auto"
+  class="ticket-container h-full w-72 bg-container ml-5 rounded overflow-auto"
   (cdkDropListDropped)="drop($event)">
   <div class="flex">
     <input (keyup.enter)="modelChanged()" #titleInput
