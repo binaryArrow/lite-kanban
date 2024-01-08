@@ -61,7 +61,6 @@ export class TicketContainerComponent implements OnInit {
   }
 
   async ngOnInit() {
-    await this.dbService.initDB()
     this.tickets = await this.dbService.getTicketsForContainer(this.model.id)
     this.tickets.sort((a, b) => a.index - b.index)
   }

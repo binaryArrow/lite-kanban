@@ -9,7 +9,7 @@ import {TableService} from "./TableService";
 @Injectable()
 export class DbService {
   db: any
-  DB_VERSION = 3
+  DB_VERSION = 2
 
   async initDB() {
     const DB_TABLES = ['ticketContainers', 'projects', 'tickets']
@@ -69,7 +69,7 @@ export class DbService {
           if (transaction.objectStoreNames.length == 0) {
             createTables(db)
           }
-          if (transaction.objectStoreNames.length < DB_TABLES.length && newVersion) {
+          else if (transaction.objectStoreNames.length < DB_TABLES.length && newVersion) {
             switch (newVersion) {
               case 2: {
                 TableService.createProjectStore(db)
@@ -78,8 +78,6 @@ export class DbService {
           }
           if (newVersion && oldVersion < newVersion) {
             updateIndexesForTables(transaction)
-          } else {
-            createTables(db)
           }
         }
       })

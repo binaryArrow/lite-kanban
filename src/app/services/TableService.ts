@@ -26,7 +26,5 @@ export class TableService {
     ticketContainerIndexes.forEach(index => {
       ticketContainerStore.createIndex(index, index)
     })
-    TableService.createProjectStore(db)
-    TableService.createTicketStore(db)
   }
 }
