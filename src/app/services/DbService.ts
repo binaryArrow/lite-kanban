@@ -82,10 +82,9 @@ export class DbService {
     } else {
       this.db = await openDB('Canban', this.DB_VERSION, {
         upgrade(db, oldVersion, newVersion, transaction) {
-          if (transaction.objectStoreNames.length < DB_TABLES.length) {
-            console.log('create')
+          if (transaction.objectStoreNames.length == 0) {
             createTables(db)
-          } else if (newVersion && oldVersion < newVersion) {
+          } if (newVersion && oldVersion < newVersion) {
             updateIndexesForTables(transaction)
           } else {
             createTables(db)
