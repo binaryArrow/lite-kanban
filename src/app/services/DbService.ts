@@ -1,8 +1,7 @@
-import {IDBPDatabase, IDBPTransaction, openDB} from "idb";
+import {IDBPDatabase, openDB} from "idb";
 import {format} from "date-fns";
-import {indexes as ticketContainerIndexes, TicketContainerModel} from "../../models/TicketContainerModel";
-import {indexes as projectIndexes} from "../../models/ProjectModel";
-import {indexes as ticketIndexes, severities, TicketModel} from "../../models/TicketModel";
+import {TicketContainerModel} from "../../models/TicketContainerModel";
+import {severities, TicketModel} from "../../models/TicketModel";
 import {Injectable} from "@angular/core";
 import {TableService} from "./TableService";
 
@@ -27,8 +26,8 @@ export class DbService {
             createTables(db)
           }
           else if (transaction.objectStoreNames.length < TableService.DB_TABLES.length && newVersion) {
-            switch (newVersion) {
-              case 2: {
+            switch (true) {
+              case (oldVersion < 2): {
                 TableService.createProjectStore(db)
               }
             }
