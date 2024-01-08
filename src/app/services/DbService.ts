@@ -4,6 +4,7 @@ import {indexes as ticketContainerIndexes, TicketContainerModel} from "../../mod
 import {indexes as projectIndexes} from "../../models/ProjectModel";
 import {indexes as ticketIndexes, severities, TicketModel} from "../../models/TicketModel";
 import {Injectable} from "@angular/core";
+import {TableService} from "./TableService";
 
 @Injectable()
 export class DbService {
@@ -13,26 +14,9 @@ export class DbService {
   async initDB() {
     const DB_TABLES = ['ticketContainers', 'projects', 'tickets']
     const createTables = (db: IDBPDatabase) => {
-      const ticketContainerStore = db.createObjectStore('ticketContainers', {
-        keyPath: 'id',
-        autoIncrement: true
-      })
-      ticketContainerIndexes.forEach(index => {
-        ticketContainerStore.createIndex(index, index)
-      })
-
-      const projectStore = db.createObjectStore('projects', {
-        keyPath: 'id',
-        autoIncrement: true
-      })
-      projectStore.createIndex('id', 'id')
-
-      const ticketStore = db.createObjectStore('tickets', {
-        keyPath: 'id',
-        autoIncrement: true
-      })
-      ticketStore.createIndex('containerId', 'containerId')
-      ticketStore.createIndex('id', 'id')
+      TableService.createTicketContainerStore(db)
+      TableService.createProjectStore(db)
+      TableService.createTicketStore(db)
     }
     const updateIndexesForTables = (transaction: IDBPTransaction<unknown, string[], 'versionchange'>) => {
       Object.values(transaction.objectStoreNames).forEach(table => {
@@ -50,7 +34,7 @@ export class DbService {
               store.deleteIndex(index)
             })
           }
-          break;
+            break;
           case 'projects': {
             // add new indexes
             projectIndexes.filter(index => !store.indexNames.contains(index)).forEach(index => {
@@ -61,7 +45,7 @@ export class DbService {
               store.deleteIndex(index)
             })
           }
-          break;
+            break;
           case 'tickets': {
             // add new indexes
             ticketIndexes.filter(index => !store.indexNames.contains(index)).forEach(index => {
@@ -72,7 +56,7 @@ export class DbService {
               store.deleteIndex(index)
             })
           }
-          break;
+            break;
         }
       })
     }
@@ -84,7 +68,15 @@ export class DbService {
         upgrade(db, oldVersion, newVersion, transaction) {
           if (transaction.objectStoreNames.length == 0) {
             createTables(db)
-          } if (newVersion && oldVersion < newVersion) {
+          }
+          if (transaction.objectStoreNames.length < DB_TABLES.length && newVersion) {
+            switch (newVersion) {
+              case 2: {
+                TableService.createProjectStore(db)
+              }
+            }
+          }
+          if (newVersion && oldVersion < newVersion) {
             updateIndexesForTables(transaction)
           } else {
             createTables(db)
