@@ -12,53 +12,10 @@ export class DbService {
   DB_VERSION = 2
 
   async initDB() {
-    const DB_TABLES = ['ticketContainers', 'projects', 'tickets']
     const createTables = (db: IDBPDatabase) => {
       TableService.createTicketContainerStore(db)
       TableService.createProjectStore(db)
       TableService.createTicketStore(db)
-    }
-    const updateIndexesForTables = (transaction: IDBPTransaction<unknown, string[], 'versionchange'>) => {
-      Object.values(transaction.objectStoreNames).forEach(table => {
-        console.log(table)
-        const store = transaction.objectStore(table)
-        // TODO: find better way to update indexes
-        switch (table) {
-          case 'ticketContainers': {
-            // add new indexes
-            ticketContainerIndexes.filter(index => !store.indexNames.contains(index)).forEach(index => {
-              store.createIndex(index, index)
-            })
-            // delete if index was delete
-            Object.values(store.indexNames).filter(index => !ticketContainerIndexes.includes(index)).forEach(index => {
-              store.deleteIndex(index)
-            })
-          }
-            break;
-          case 'projects': {
-            // add new indexes
-            projectIndexes.filter(index => !store.indexNames.contains(index)).forEach(index => {
-              store.createIndex(index, index)
-            })
-            // delete if index was delete
-            Object.values(store.indexNames).filter(index => !projectIndexes.includes(index)).forEach(index => {
-              store.deleteIndex(index)
-            })
-          }
-            break;
-          case 'tickets': {
-            // add new indexes
-            ticketIndexes.filter(index => !store.indexNames.contains(index)).forEach(index => {
-              store.createIndex(index, index)
-            })
-            // delete if index was delete
-            Object.values(store.indexNames).filter(index => !ticketIndexes.includes(index)).forEach(index => {
-              store.deleteIndex(index)
-            })
-          }
-            break;
-        }
-      })
     }
     if (!('indexedDB' in window)) {
       alert("This browser doesn't support IndexedDB.");
@@ -69,7 +26,7 @@ export class DbService {
           if (transaction.objectStoreNames.length == 0) {
             createTables(db)
           }
-          else if (transaction.objectStoreNames.length < DB_TABLES.length && newVersion) {
+          else if (transaction.objectStoreNames.length < TableService.DB_TABLES.length && newVersion) {
             switch (newVersion) {
               case 2: {
                 TableService.createProjectStore(db)
@@ -77,7 +34,7 @@ export class DbService {
             }
           }
           if (newVersion && oldVersion < newVersion) {
-            updateIndexesForTables(transaction)
+            TableService.updateIndexesForTables(transaction)
           }
         }
       })
