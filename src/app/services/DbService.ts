@@ -19,8 +19,10 @@ export class DbService {
     if (!('indexedDB' in window)) {
       alert("This browser doesn't support IndexedDB.");
     } else {
+      let updateVersion1Containers = 0
       this.db = await openDB('Canban', this.DB_VERSION, {
         upgrade(db, oldVersion, newVersion, transaction) {
+          updateVersion1Containers = oldVersion
           if (transaction.objectStoreNames.length == 0) {
             createTables(db)
           } else if (transaction.objectStoreNames.length < TableService.DB_TABLES.length && newVersion) {
@@ -35,6 +37,14 @@ export class DbService {
           }
         }
       })
+      if (updateVersion1Containers == 1) {
+
+      this.db.transaction('ticketContainers', 'readwrite').objectStore('ticketContainers').getAll().then((res: TicketContainerModel[]) => {
+          res.forEach((container: TicketContainerModel) => {
+            this.db.put({...container, projectId: 0})
+          })
+        })
+      }
     }
   }
 

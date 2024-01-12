@@ -22,11 +22,6 @@ export class TableService {
     })
     projectStore.createIndex('id', 'id')
     projectStore.put({title: 'New Project', id: 0})
-    db.getAll('ticketContainers').then((res) => {
-      res.forEach((container: TicketContainerModel) => {
-        db.put('ticketContainers', {...container, projectId: 0})
-      })
-    })
   }
 
   static createTicketContainerStore(db: IDBPDatabase) {
