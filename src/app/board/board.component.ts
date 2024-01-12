@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {NgForOf} from "@angular/common";
 import {TicketContainerComponent} from "../ticket-container/ticket-container.component";
 import {TicketContainerModel} from "../../models/TicketContainerModel";
@@ -20,18 +20,13 @@ import {faPlus} from "@fortawesome/free-solid-svg-icons";
   styleUrl: './board.component.scss',
   providers: [DbService]
 })
-export class BoardComponent implements OnInit {
-  containers: TicketContainerModel[] = []
+export class BoardComponent {
+  @Input() containers: TicketContainerModel[] = []
   private dbService: DbService;
   protected readonly faPlus = faPlus;
 
   constructor(dbService: DbService) {
     this.dbService = dbService
-  }
-
-  async ngOnInit() {
-    await this.dbService.initDB()
-    this.containers = await this.dbService.getAllTicketContainers()
   }
 
   async addNewContainer() {

@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatListModule} from "@angular/material/list";
 import {MatToolbarModule} from "@angular/material/toolbar";
@@ -8,6 +8,8 @@ import {RouterLink, RouterLinkActive} from "@angular/router";
 import {BoardComponent} from "../board/board.component";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {faBars} from "@fortawesome/free-solid-svg-icons";
+import {TicketContainerModel} from "../../models/TicketContainerModel";
+import {DbService} from "../services/DbService";
 
 @Component({
   selector: 'menu-sidebar',
@@ -23,9 +25,20 @@ import {faBars} from "@fortawesome/free-solid-svg-icons";
     BoardComponent,
     FaIconComponent
   ],
+  providers: [DbService],
   templateUrl: './menu-sidebar.component.html',
   styleUrl: './menu-sidebar.component.scss'
 })
-export class MenuSidebarComponent {
+export class MenuSidebarComponent implements OnInit{
   protected readonly faBars = faBars;
+  private dbService: DbService;
+  containers: TicketContainerModel[] = []
+
+  constructor(dbService: DbService) {
+    this.dbService = dbService
+  }
+  async ngOnInit() {
+    await this.dbService.initDB()
+    this.containers = await this.dbService.getAllTicketContainers()
+  }
 }
