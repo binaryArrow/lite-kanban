@@ -1,5 +1,5 @@
 import {IDBPDatabase, IDBPTransaction} from "idb";
-import {indexes as ticketContainerIndexes, TicketContainerModel} from "../../models/TicketContainerModel";
+import {indexes as ticketContainerIndexes} from "../../models/TicketContainerModel";
 import {indexes as projectIndexes} from "../../models/ProjectModel";
 import {indexes as ticketIndexes} from "../../models/TicketModel";
 

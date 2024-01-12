@@ -39,16 +39,21 @@ export class DbService {
       })
       if (updateVersion1Containers == 1) {
 
-      this.db.transaction('ticketContainers', 'readwrite').objectStore('ticketContainers').getAll().then((res: TicketContainerModel[]) => {
-        console.log(res)
+        this.db.transaction('ticketContainers', 'readwrite').objectStore('ticketContainers').getAll().then((res: TicketContainerModel[]) => {
+          console.log(res)
+          const newContainers = res.map(container => {
+            return {...container, projectId: 0}
+          })
           res.forEach((container: TicketContainerModel) => {
-            this.db.put({...container, projectId: 0})
+            this.db.delete('ticketContainers', container.id)
+          })
+          newContainers.forEach((container: TicketContainerModel) => {
+            this.db.add('ticketContainers', container)
           })
         })
       }
     }
   }
-
 
   async addNewTicketContainer() {
     const db = await openDB('Canban', this.DB_VERSION)
