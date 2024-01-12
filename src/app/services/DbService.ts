@@ -27,11 +27,6 @@ export class DbService {
             switch (true) {
               case (oldVersion < 2): {
                 TableService.createProjectStore(db)
-                db.getAll('ticketContainers').then((res) => {
-                  res.forEach((container: TicketContainerModel) => {
-                    db.put('ticketContainers', {...container, projectId: 0})
-                  })
-                })
               }
             }
           }
