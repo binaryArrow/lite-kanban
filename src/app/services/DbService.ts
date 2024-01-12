@@ -40,6 +40,7 @@ export class DbService {
       if (updateVersion1Containers == 1) {
 
       this.db.transaction('ticketContainers', 'readwrite').objectStore('ticketContainers').getAll().then((res: TicketContainerModel[]) => {
+        console.log(res)
           res.forEach((container: TicketContainerModel) => {
             this.db.put({...container, projectId: 0})
           })
