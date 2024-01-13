@@ -29,7 +29,7 @@ export class DbService {
           } else if (transaction.objectStoreNames.length < TableService.DB_TABLES.length && newVersion) {
             switch (true) {
               case (oldVersion < 2): {
-                TableService.createProjectStore(db, transaction)
+                TableService.createProjectStore(db)
               }
             }
           }

@@ -15,7 +15,7 @@ export class TableService {
     ticketStore.createIndex('id', 'id')
   }
 
-  static async createProjectStore(db: IDBPDatabase, transaction?: IDBPTransaction<unknown, string[], 'versionchange'>) {
+  static async createProjectStore(db: IDBPDatabase) {
     const projectStore = db.createObjectStore('projects', {
       keyPath: 'id',
       autoIncrement: true
@@ -23,10 +23,6 @@ export class TableService {
     projectStore.createIndex('id', 'id')
     projectStore.put({title: 'New Project', id: 0})
 
-    if (transaction) {
-      const store = transaction.objectStore('projects')
-      await store.add({title: 'New Project', id: 0})
-    }
   }
 
   static createTicketContainerStore(db: IDBPDatabase) {
