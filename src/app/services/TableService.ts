@@ -15,13 +15,18 @@ export class TableService {
     ticketStore.createIndex('id', 'id')
   }
 
-  static createProjectStore(db: IDBPDatabase) {
+  static createProjectStore(db: IDBPDatabase, transaction?: IDBPTransaction<unknown, string[], 'versionchange'>) {
     const projectStore = db.createObjectStore('projects', {
       keyPath: 'id',
       autoIncrement: true
     })
     projectStore.createIndex('id', 'id')
     projectStore.put({title: 'New Project', id: 0})
+
+    if (transaction) {
+      const store = transaction.objectStore('projects')
+      store.add({title: 'New Project', id: 0})
+    }
   }
 
   static createTicketContainerStore(db: IDBPDatabase) {

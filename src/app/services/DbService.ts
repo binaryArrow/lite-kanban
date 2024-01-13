@@ -4,6 +4,7 @@ import {TicketContainerModel} from "../../models/TicketContainerModel";
 import {severities, TicketModel} from "../../models/TicketModel";
 import {Injectable} from "@angular/core";
 import {TableService} from "./TableService";
+import {ProjectModel} from "../../models/ProjectModel";
 
 @Injectable()
 export class DbService {
@@ -28,7 +29,7 @@ export class DbService {
           } else if (transaction.objectStoreNames.length < TableService.DB_TABLES.length && newVersion) {
             switch (true) {
               case (oldVersion < 2): {
-                TableService.createProjectStore(db)
+                TableService.createProjectStore(db, transaction)
               }
             }
           }
@@ -38,7 +39,6 @@ export class DbService {
         }
       })
       if (updateVersion1Containers == 1) {
-
         this.db.transaction('ticketContainers', 'readwrite').objectStore('ticketContainers').getAll().then((res: TicketContainerModel[]) => {
           console.log(res)
           const newContainers = res.map(container => {
@@ -90,10 +90,16 @@ export class DbService {
     } as TicketModel)
   }
 
-  async getAllTicketContainers(): Promise<TicketContainerModel[]> {
-    return await this.db.transaction('ticketContainers').objectStore('ticketContainers').getAll()
+  async getAllTicketContainers(projectId: number): Promise<TicketContainerModel[]> {
+    const db = await openDB('Canban', this.DB_VERSION)
+    return await db.getAllFromIndex('ticketContainers', 'projectId', projectId).then((res) => {
+      return res as TicketContainerModel[]
+    })
   }
 
+  async getAllProjects(): Promise<TicketContainerModel[]> {
+    return await this.db.transaction('projects').objectStore('projects').getAll()
+  }
   async getTicketContainerById(id: number) {
     return await this.db.getFromIndex('ticketContainers', 'id', id)
   }
@@ -131,5 +137,19 @@ export class DbService {
       return res as TicketModel[]
     })
   }
-
+  async putProject(model: ProjectModel) {
+    const db = await openDB('Canban', this.DB_VERSION)
+    await db.put('projects', {title: model.title, id: model.id})
+  }
+  async addNewProject() {
+    const db = await openDB('Canban', this.DB_VERSION)
+    const project = {
+      title: 'New Project'
+    } as ProjectModel
+    return await db.add('projects', project).then(res => {
+      return {...project, id: res} as ProjectModel
+    }).catch(err => {
+      console.error('something went wrong saving to IDB: ' + err)
+    })
+  }
 }
