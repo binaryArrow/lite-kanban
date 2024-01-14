@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {NgForOf} from "@angular/common";
 import {TicketContainerComponent} from "../ticket-container/ticket-container.component";
 import {TicketContainerModel} from "../../models/TicketContainerModel";
@@ -22,6 +22,7 @@ import {faPlus} from "@fortawesome/free-solid-svg-icons";
 })
 export class BoardComponent {
   @Input() containers: TicketContainerModel[] = []
+  @Input() projectId: number = 0;
   private dbService: DbService;
   protected readonly faPlus = faPlus;
 
@@ -29,8 +30,8 @@ export class BoardComponent {
     this.dbService = dbService
   }
 
-  async addNewContainer() {
-    this.dbService.addNewTicketContainer().then(res => {
+  async addNewContainer(projectId: number) {
+    this.dbService.addNewTicketContainer(projectId).then(res => {
       if (res) {
         this.containers.push(res)
       }

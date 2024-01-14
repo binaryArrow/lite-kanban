@@ -1,6 +1,9 @@
 <mat-sidenav-container hasBackdrop="true" class="sidenav_container">
   <mat-sidenav #sidenav mode="over" position="start" class="left-0 w-1/6">
     <div class="font-bold m-1 hover:bg-containerHover hover:cursor-pointer" (click)="selectProject(project)" *ngFor="let project of projects">{{project.title}}</div>
+    <button class="m-2 hover:bg-containerHover rounded text-center" (click)="addNewProject()">
+      <fa-icon [icon]="faPlus"></fa-icon>
+    </button>
   </mat-sidenav>
 
   <mat-sidenav-content>
@@ -11,12 +14,15 @@
       <input #projectTitleInput type="text"
              class="disabled:bg-[#212121] text-center focus:outline-none"
              [disabled]="true" [(ngModel)]="selectedProject.title" (focusout)="projectTitleChanged()" (keyup.enter)="projectTitleChanged()">
-      <button class="fa_icon_scaling" (click)="editProjectTitle()">
+      <button class="fa_icon_scaling m-1" (click)="editProjectTitle()">
         <fa-icon [icon]="faPencil" size="sm"></fa-icon>
+      </button>
+      <button class="fa_icon_scaling m-1" (click)="deleteProject()" *ngIf="projects.length > 1">
+        <fa-icon [icon]="faTrash" size="sm"></fa-icon>
       </button>
     </mat-toolbar>
     <div class="h-3/4">
-      <board [containers]="containers"></board>
+      <board [containers]="containers" [projectId]="selectedProject.id"></board>
     </div>
   </mat-sidenav-content>
 

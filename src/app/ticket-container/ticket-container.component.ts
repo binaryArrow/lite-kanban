@@ -74,7 +74,6 @@ export class TicketContainerComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<TicketModel[], any>) {
-    {
       if (event.previousContainer === event.container) {
         moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
       } else {
@@ -85,7 +84,6 @@ export class TicketContainerComponent implements OnInit {
           event.currentIndex,
         );
       }
-    }
     this.tickets.forEach(async (ticket, index) => {
       ticket.index = index
       ticket.containerId = this.model.id
@@ -139,9 +137,6 @@ export class TicketContainerComponent implements OnInit {
 
   async deleteContainer() {
     if (this.ticketContainers.length > 2) {
-      for (const ticket of this.tickets) {
-        await this.dbService.deleteTicket(ticket.id)
-      }
       this.dbService.deleteTicketContainer(this.model.id).then(() => {
         this.ticketContainers.splice(this.ticketContainers.indexOf(this.model), 1)
       })

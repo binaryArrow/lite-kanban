@@ -1,6 +1,6 @@
 <div class="flex h-full flex-nowrap w-auto overflow-x-auto" cdkDropListGroup>
   <ticket-container [model]="container" [ticketContainers]="containers" *ngFor="let container of containers"></ticket-container>
-  <button class="bg-container hover:bg-containerHover rounded p-0.5 ml-5 mr-5 text-center" (click)="addNewContainer()">
+  <button class="bg-container hover:bg-containerHover rounded p-0.5 ml-5 mr-5 text-center" (click)="addNewContainer(projectId)">
     <fa-icon [icon]="faPlus"/>
   </button>
 </div>

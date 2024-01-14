@@ -55,10 +55,11 @@ export class DbService {
     }
   }
 
-  async addNewTicketContainer() {
+  async addNewTicketContainer(projectId: number) {
     const db = await openDB('Canban', this.DB_VERSION)
     const container = {
-      title: 'NEW'
+      title: 'NEW',
+      projectId: projectId
     } as TicketContainerModel
     return await db.add('ticketContainers', container).then(res => {
       return {...container, id: res} as TicketContainerModel
@@ -69,12 +70,18 @@ export class DbService {
 
   async putTicketContainer(model: TicketContainerModel) {
     const db = await openDB('Canban', this.DB_VERSION)
-    await db.put('ticketContainers', {title: model.title, id: model.id})
+    await db.put('ticketContainers', {title: model.title, id: model.id, projectId: model.projectId})
   }
 
   async deleteTicketContainer(containerId: number) {
-    const db = await openDB('Canban', 1)
-    await db.delete('ticketContainers', containerId)
+    const db = await openDB('Canban', this.DB_VERSION)
+    await db.delete('ticketContainers', containerId).then(()=>{
+      db.getAllFromIndex('tickets', 'containerId', containerId).then((res: TicketModel[]) => {
+        res.forEach(ticket => {
+          this.deleteTicket(ticket.id)
+        })
+      })
+    })
   }
 
   async putTicket(model: TicketModel) {
@@ -150,6 +157,18 @@ export class DbService {
       return {...project, id: res} as ProjectModel
     }).catch(err => {
       console.error('something went wrong saving to IDB: ' + err)
+    })
+  }
+  async deleteProject(projectId: number) {
+    const db = await openDB('Canban', this.DB_VERSION)
+    if ( (await db.getAll('projects')).length == 1) {
+      return
+    }
+    await db.delete('projects', projectId)
+    db.getAllFromIndex('ticketContainers', 'projectId', projectId).then((res: TicketContainerModel[]) => {
+      res.forEach(container => {
+        this.deleteTicketContainer(container.id)
+      })
     })
   }
 }
