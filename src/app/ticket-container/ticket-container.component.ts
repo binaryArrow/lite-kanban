@@ -3,7 +3,7 @@ import {TicketContainerModel} from "../../models/TicketContainerModel";
 import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem} from "@angular/cdk/drag-drop";
 import {severities, TicketModel} from "../../models/TicketModel";
 import {DbService} from "../services/DbService";
-import {faEllipsisV, faPlus, faTrash, faX} from "@fortawesome/free-solid-svg-icons";
+import {faEllipsisV, faPlus, faTrash} from "@fortawesome/free-solid-svg-icons";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {FormsModule} from "@angular/forms";
 import {MatInputModule} from "@angular/material/input";
@@ -40,7 +40,6 @@ export class TicketContainerComponent implements OnInit {
   @ViewChild('ticketTitleInput') ticketTitleInput!: ElementRef<HTMLInputElement>
   protected readonly faPlus = faPlus;
   protected readonly severities = severities;
-  protected readonly faX = faX;
   protected readonly faEllipsisV = faEllipsisV;
   protected readonly faTrash = faTrash;
   private dbService: DbService;
