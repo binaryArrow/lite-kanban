@@ -135,12 +135,10 @@ export class TicketContainerComponent implements OnInit {
   }
 
   async deleteContainer() {
-    if (this.ticketContainers.length > 2) {
       this.dbService.deleteTicketContainer(this.model.id).then(() => {
         this.ticketContainers.splice(this.ticketContainers.indexOf(this.model), 1)
       })
       this.deleteConfirmationDialog.nativeElement.close()
-    }
   }
 
   closeDialogWithClickOutside(event: MouseEvent, element: HTMLDialogElement) {

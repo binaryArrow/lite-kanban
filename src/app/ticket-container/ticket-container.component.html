@@ -18,7 +18,7 @@
           (click)="closeDialogWithClickOutside($event, deleteConfirmationDialog)">
     <div>
       <h3> Delete Container?</h3>
-      <button *ngIf="ticketContainers.length > 2" class="bg-containerHover hover:bg-containerHover2"
+      <button class="bg-containerHover hover:bg-containerHover2"
               (click)="deleteContainer()">Yes
       </button>
       <button class="bg-containerHover hover:bg-containerHover2 m-2" (click)="deleteConfirmationDialog.close()">No

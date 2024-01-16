@@ -10,8 +10,8 @@ export interface TicketModel {
 
 export const severities = [
     '',
-    'Low',
     'Lowest',
+    'Low',
     'Medium',
     'High',
     'Highest'
