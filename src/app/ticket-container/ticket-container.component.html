@@ -48,23 +48,27 @@
         [(ngModel)]="openTicket!!.description" (focusout)="saveTicket()"></textarea>
       <div>
         <div class="p-1">Creation: {{ openTicket!!.createDate }}</div>
-        <label for="severity">Severity </label>
-        <select id="severity" class="mt-5 bg-containerHover" [(ngModel)]="openTicket!!.severity"
+        <label>Severity </label>
+        <select class="mt-5 bg-containerHover" [(ngModel)]="openTicket!!.severity"
                 (change)="saveTicket()">
-          <option *ngFor="let severity of severities" [value]="severity">{{ severity }}</option>
+          @for (severity of severities; track severity) {
+            <option [value]="severity">{{ severity }}</option>
+          }
         </select>
       </div>
     </div>
     <button class="fa_icon_scaling absolute bottom-0 right-0 mb-2 mr-2" (click)="showConfirmation = true">
       <fa-icon [icon]="faTrash"/>
     </button>
-    <div *ngIf="showConfirmation" class="confirm_dialog bg-containerHover absolute bottom-3 right-10">
-      Delete Ticket?
-      <div>
-        <button class="bg-containerHover hover:bg-containerHover2" (click)="deleteTicket()">Yes</button>
-        <button class="bg-containerHover hover:bg-containerHover2 m-2" (click)="showConfirmation = false">No</button>
+    @if (showConfirmation) {
+      <div class="confirm_dialog bg-containerHover absolute bottom-3 right-10">
+        Delete Ticket?
+        <div>
+          <button class="bg-containerHover hover:bg-containerHover2" (click)="deleteTicket()">Yes</button>
+          <button class="bg-containerHover hover:bg-containerHover2 m-2" (click)="showConfirmation = false">No</button>
+        </div>
       </div>
-    </div>
+    }
   </dialog>
 
 </div>

@@ -91,7 +91,7 @@ export class TicketContainerComponent implements OnInit {
   }
 
   addNewTicket() {
-    this.dbService.addNewTicket(this.model.id).then(async response => {
+    this.dbService.addNewTicket(this.model.id, this.tickets.length).then(async response => {
       this.tickets.unshift(response as TicketModel)
       for (let i = 1; i < this.tickets.length; i++) {
         this.tickets[i].index = i

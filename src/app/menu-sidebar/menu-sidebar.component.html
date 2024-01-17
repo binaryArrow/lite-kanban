@@ -1,6 +1,11 @@
 <mat-sidenav-container hasBackdrop="true" class="sidenav_container">
   <mat-sidenav #sidenav mode="over" position="start" class="left-0 w-1/6">
-    <div class="font-bold m-1 hover:bg-containerHover hover:cursor-pointer" (click)="selectProject(project)" *ngFor="let project of projects">{{project.title}}</div>
+    @for (project of projects; track project.id) {
+      <div [class]="selectedProject.id === project.id ?
+    'font-bold m-1 bg-containerHover hover:bg-containerHover hover:cursor-pointer':'font-bold m-1 hover:bg-containerHover hover:cursor-pointer' "
+           (click)="selectProject(project)">{{ project.title }}
+      </div>
+    }
     <button class="m-2 hover:bg-containerHover rounded text-center" (click)="addNewProject()">
       <fa-icon [icon]="faPlus"></fa-icon>
     </button>
@@ -13,7 +18,8 @@
       </button>
       <input #projectTitleInput type="text"
              class="disabled:bg-[#212121] text-center focus:outline-none"
-             [disabled]="true" [(ngModel)]="selectedProject.title" (focusout)="projectTitleChanged()" (keyup.enter)="projectTitleChanged()">
+             [disabled]="true" [(ngModel)]="selectedProject.title" (focusout)="projectTitleChanged()"
+             (keyup.enter)="projectTitleChanged()">
       <button class="fa_icon_scaling m-1" (click)="editProjectTitle()">
         <fa-icon [icon]="faPencil" size="sm"></fa-icon>
       </button>
