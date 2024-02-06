@@ -14,12 +14,20 @@
       <input #projectTitleInput type="text"
              class="disabled:bg-[#212121] text-center focus:outline-none"
              [disabled]="true" [(ngModel)]="selectedProject.title" (focusout)="projectTitleChanged()" (keyup.enter)="projectTitleChanged()">
-      <button class="fa_icon_scaling m-1" (click)="editProjectTitle()">
-        <fa-icon [icon]="faPencil" size="sm"></fa-icon>
-      </button>
-      <button class="fa_icon_scaling m-1" (click)="deleteProject()" *ngIf="projects.length > 1">
-        <fa-icon [icon]="faTrash" size="sm"></fa-icon>
-      </button>
+      <div>
+        <button class="fa_icon_scaling m-1" (click)="editProjectTitle()">
+          <fa-icon [icon]="faPencil" size="sm"></fa-icon>
+        </button>
+        <button class="fa_icon_scaling m-1" (click)="deleteProject()" *ngIf="projects.length > 1"
+                title="delete project">
+          <fa-icon [icon]="faTrash" size="sm"></fa-icon>
+        </button>
+      </div>
+      <div class="github-container">
+        <a href="https://github.com/binaryArrow/canban2" class="fa_icon_scaling m-1" title="See Github">
+          <fa-icon [icon]="faGithub"></fa-icon>
+        </a>
+      </div>
     </mat-toolbar>
     <div class="h-3/4">
       <board [containers]="containers" [projectId]="selectedProject.id"></board>

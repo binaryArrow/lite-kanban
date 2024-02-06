@@ -8,6 +8,7 @@ import {RouterLink, RouterLinkActive} from "@angular/router";
 import {BoardComponent} from "../board/board.component";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {faBars, faPencil, faPlus, faTrash} from "@fortawesome/free-solid-svg-icons";
+import {faGithub} from "@fortawesome/free-brands-svg-icons";
 import {TicketContainerModel} from "../../models/TicketContainerModel";
 import {DbService} from "../services/DbService";
 import {ProjectModel} from "../../models/ProjectModel";
@@ -41,6 +42,7 @@ export class MenuSidebarComponent implements OnInit {
   protected readonly faBars = faBars;
   protected readonly faTrash = faTrash;
   protected readonly faPencil = faPencil;
+  protected readonly faGithub = faGithub;
   private dbService: DbService;
   containers: TicketContainerModel[] = []
   projects: ProjectModel[] = []
