@@ -47,12 +47,29 @@
         rows="25" spellcheck="false"
         [(ngModel)]="openTicket!!.description" (focusout)="saveTicket()"></textarea>
       <div>
-        <div class="p-1">Creation: {{ openTicket!!.createDate }}</div>
-        <label for="severity">Severity </label>
-        <select id="severity" class="mt-5 bg-containerHover" [(ngModel)]="openTicket!!.severity"
-                (change)="saveTicket()">
-          <option *ngFor="let severity of severities" [value]="severity">{{ severity }}</option>
-        </select>
+        <div class="p-1">
+          <div class="text-start">
+            Creation: {{ openTicket!!.createDate }}
+          </div>
+          <div class="text-start">
+            <div>
+              <label for="severity">Severity </label>
+              <select id="severity" class="mt-5 bg-containerHover" [(ngModel)]="openTicket!!.severity"
+                      (change)="saveTicket()">
+                <option *ngFor="let severity of severities" [value]="severity">{{ severity }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="text-center pt-5">
+            <label for="image-upload">
+              <button class="fa_icon_scaling" (click)="triggerImageUpload()">
+                <fa-icon [icon]="faFileUpload" size="2x"></fa-icon>
+              </button>
+            </label>
+            <input type="file" accept="image/png, image/jpeg, image/jpg" (change)="uploadImage()" multiple id="image-upload" #imageUpload>
+          </div>
+        </div>
+        <img *ngIf="pictureData" src="{{pictureData}}" alt="" height="50px" width="50px">
       </div>
     </div>
     <button class="fa_icon_scaling absolute bottom-0 right-0 mb-2 mr-2" (click)="showConfirmation = true">

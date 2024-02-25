@@ -1,6 +1,7 @@
 .cdk-drag-animating {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
+
 .ticket-container.cdk-drop-list-dragging .ticket-wrapper:not(.cdk-drag-placeholder) {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
@@ -38,4 +39,8 @@
   height: 70px;
   box-shadow: 0 4px 5px rgb(0 0 0 / 30%);
   border: 2px solid #6b6b6b;
+}
+
+#image-upload {
+  display: none;
 }

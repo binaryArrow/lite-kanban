@@ -3,12 +3,12 @@ import {TicketContainerModel} from "../../models/TicketContainerModel";
 import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem} from "@angular/cdk/drag-drop";
 import {severities, TicketModel} from "../../models/TicketModel";
 import {DbService} from "../services/DbService";
-import {faEllipsisV, faPlus, faTrash, faX} from "@fortawesome/free-solid-svg-icons";
+import {faEllipsisV, faPlus, faTrash, faFileUpload} from "@fortawesome/free-solid-svg-icons";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {FormsModule} from "@angular/forms";
 import {MatInputModule} from "@angular/material/input";
 import {TicketComponent} from "../ticket/ticket.component";
-import {NgForOf, NgIf} from "@angular/common";
+import {NgForOf, NgIf, NgOptimizedImage} from "@angular/common";
 import {MatMenuModule} from "@angular/material/menu";
 
 @Component({
@@ -23,7 +23,8 @@ import {MatMenuModule} from "@angular/material/menu";
     TicketComponent,
     NgIf,
     NgForOf,
-    MatMenuModule
+    MatMenuModule,
+    NgOptimizedImage
   ],
   templateUrl: './ticket-container.component.html',
   styleUrl: './ticket-container.component.scss',
@@ -38,11 +39,13 @@ export class TicketContainerComponent implements OnInit {
   @ViewChild('dialog') dialog!: ElementRef<HTMLDialogElement>
   @ViewChild('deleteConfirmationDialog') deleteConfirmationDialog!: ElementRef<HTMLDialogElement>
   @ViewChild('ticketTitleInput') ticketTitleInput!: ElementRef<HTMLInputElement>
+  @ViewChild('imageUpload') fileUpload!: ElementRef<HTMLInputElement>
+
   protected readonly faPlus = faPlus;
   protected readonly severities = severities;
-  protected readonly faX = faX;
   protected readonly faEllipsisV = faEllipsisV;
   protected readonly faTrash = faTrash;
+  protected readonly faFileUpload = faFileUpload;
   private dbService: DbService;
   protected showConfirmation = false;
   tickets: TicketModel[] = []
@@ -55,6 +58,7 @@ export class TicketContainerComponent implements OnInit {
     createDate: '',
     severity: severities[0]
   }
+  pictureData: string = ''
 
   constructor(dbService: DbService) {
     this.dbService = dbService
@@ -147,6 +151,23 @@ export class TicketContainerComponent implements OnInit {
   closeDialogWithClickOutside(event: MouseEvent, element: HTMLDialogElement) {
     if(event.target === element) {
       element.close()
+    }
+  }
+
+  triggerImageUpload() {
+    this.fileUpload.nativeElement.click()
+  }
+
+  // TODO: add imagedata to tickets and display uploaded images in ticket
+  uploadImage() {
+    const files = this.fileUpload.nativeElement.files
+    if (files) {
+      const reader = new FileReader()
+      reader.readAsDataURL(files[0])
+      reader.onload = () => {
+        console.log(reader.result)
+        this.pictureData = URL.createObjectURL(files[0])
+      }
     }
   }
 }
