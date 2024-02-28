@@ -3,12 +3,12 @@ import {TicketContainerModel} from "../../models/TicketContainerModel";
 import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem} from "@angular/cdk/drag-drop";
 import {severities, TicketModel} from "../../models/TicketModel";
 import {DbService} from "../services/DbService";
-import {faEllipsisV, faPlus, faTrash, faFileUpload} from "@fortawesome/free-solid-svg-icons";
+import {faEllipsisV, faPlus, faTrash, faX} from "@fortawesome/free-solid-svg-icons";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {FormsModule} from "@angular/forms";
 import {MatInputModule} from "@angular/material/input";
 import {TicketComponent} from "../ticket/ticket.component";
-import {NgForOf, NgIf, NgOptimizedImage} from "@angular/common";
+import {NgForOf, NgIf} from "@angular/common";
 import {MatMenuModule} from "@angular/material/menu";
 
 @Component({
@@ -96,7 +96,7 @@ export class TicketContainerComponent implements OnInit {
   }
 
   addNewTicket() {
-    this.dbService.addNewTicket(this.model.id).then(async response => {
+    this.dbService.addNewTicket(this.model.id, this.tickets.length).then(async response => {
       this.tickets.unshift(response as TicketModel)
       for (let i = 1; i < this.tickets.length; i++) {
         this.tickets[i].index = i
@@ -140,12 +140,10 @@ export class TicketContainerComponent implements OnInit {
   }
 
   async deleteContainer() {
-    if (this.ticketContainers.length > 2) {
       this.dbService.deleteTicketContainer(this.model.id).then(() => {
         this.ticketContainers.splice(this.ticketContainers.indexOf(this.model), 1)
       })
       this.deleteConfirmationDialog.nativeElement.close()
-    }
   }
 
   closeDialogWithClickOutside(event: MouseEvent, element: HTMLDialogElement) {

@@ -116,10 +116,10 @@ export class DbService {
     return await db.getFromIndex('tickets', 'id', id) as TicketModel
   }
 
-  async addNewTicket(containerId: number) {
+  async addNewTicket(containerId: number, ticketLengths: number) {
     const db = await openDB('Canban', this.DB_VERSION)
     const ticket = {
-      title: 'new ticket',
+      title: `New Ticket ${ticketLengths+1}`,
       containerId: containerId,
       description: '',
       index: 0,

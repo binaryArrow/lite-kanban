@@ -22,9 +22,9 @@ export class TicketComponent {
   get severityIndicator() {
     switch (this.ticketModel.severity) {
       case severities[1]:
-        return 'background-color: #def366'
-      case severities[2]:
         return 'background-color: #b9f167'
+      case severities[2]:
+        return 'background-color: #def366'
       case severities[3]:
         return 'background-color: #fff644'
       case severities[4]:

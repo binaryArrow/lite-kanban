@@ -18,7 +18,7 @@
           (click)="closeDialogWithClickOutside($event, deleteConfirmationDialog)">
     <div>
       <h3> Delete Container?</h3>
-      <button *ngIf="ticketContainers.length > 2" class="bg-containerHover hover:bg-containerHover2"
+      <button class="bg-containerHover hover:bg-containerHover2"
               (click)="deleteContainer()">Yes
       </button>
       <button class="bg-containerHover hover:bg-containerHover2 m-2" (click)="deleteConfirmationDialog.close()">No
@@ -75,13 +75,15 @@
     <button class="fa_icon_scaling absolute bottom-0 right-0 mb-2 mr-2" (click)="showConfirmation = true">
       <fa-icon [icon]="faTrash"/>
     </button>
-    <div *ngIf="showConfirmation" class="confirm_dialog bg-containerHover absolute bottom-3 right-10">
-      Delete Ticket?
-      <div>
-        <button class="bg-containerHover hover:bg-containerHover2" (click)="deleteTicket()">Yes</button>
-        <button class="bg-containerHover hover:bg-containerHover2 m-2" (click)="showConfirmation = false">No</button>
+    @if (showConfirmation) {
+      <div class="confirm_dialog bg-containerHover absolute bottom-3 right-10">
+        Delete Ticket?
+        <div>
+          <button class="bg-containerHover hover:bg-containerHover2" (click)="deleteTicket()">Yes</button>
+          <button class="bg-containerHover hover:bg-containerHover2 m-2" (click)="showConfirmation = false">No</button>
+        </div>
       </div>
-    </div>
+    }
   </dialog>
 
 </div>
