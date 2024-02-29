@@ -25,6 +25,17 @@
       </button>
     </div>
   </dialog>
+  <dialog #deleteImageConfirmationDialog class="delete-dialog w-64 h-16 bg-containerHover overflow-hidden"
+          (click)="closeDialogWithClickOutside($event, deleteImageConfirmationDialog)">
+    <div>
+      <h3> Delete Image?</h3>
+      <button class="bg-containerHover hover:bg-containerHover2"
+              (click)="deleteImage()">Yes
+      </button>
+      <button class="bg-containerHover hover:bg-containerHover2 m-2" (click)="deleteImageConfirmationDialog.close()">No
+      </button>
+    </div>
+  </dialog>
   <div>
     <button class="m-2 hover:bg-containerHover rounded text-center" (click)="addNewTicket()">
       <fa-icon [icon]="faPlus"></fa-icon>
@@ -66,15 +77,28 @@
                 <fa-icon [icon]="faFileUpload" size="2x"></fa-icon>
               </button>
             </label>
-            <input type="file" accept="image/png, image/jpeg, image/jpg" (change)="uploadImage()" multiple id="image-upload" #imageUpload>
+            <input type="file" accept="image/png, image/jpeg, image/jpg" (change)="uploadImage()" multiple
+                   id="image-upload" #imageUpload>
           </div>
         </div>
-        <img *ngIf="pictureData" src="{{pictureData}}" alt="" height="50px" width="50px">
+        <div class="flex flex-wrap h-80 overflow-auto">
+          @for (image of imageData; track image.id) {
+            <div>
+              <button class="ml-2 float-right fa_icon_scaling" (click)="showImageDeleteConfirmation(image.id)">
+                <fa-icon [icon]="faTrash"/>
+              </button>
+              <img src="{{image.imageURL}}" alt="" height="80px" width="180px" class="image_thumbnail"
+                   (click)="openImage(image.imageURL)">
+            </div>
+          }
+        </div>
       </div>
     </div>
-    <button class="fa_icon_scaling absolute bottom-0 right-0 mb-2 mr-2" (click)="showConfirmation = true">
-      <fa-icon [icon]="faTrash"/>
-    </button>
+    <div class="relative">
+      <button class="fa_icon_scaling absolute bottom-0 right-0 mb-2 mr-2" (click)="showConfirmation = true">
+        <fa-icon [icon]="faTrash"/>
+      </button>
+    </div>
     @if (showConfirmation) {
       <div class="confirm_dialog bg-containerHover absolute bottom-3 right-10">
         Delete Ticket?

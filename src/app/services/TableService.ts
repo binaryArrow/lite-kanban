@@ -2,9 +2,10 @@ import {IDBPDatabase, IDBPTransaction} from "idb";
 import {indexes as ticketContainerIndexes} from "../../models/TicketContainerModel";
 import {indexes as projectIndexes} from "../../models/ProjectModel";
 import {indexes as ticketIndexes} from "../../models/TicketModel";
+import {indexes as imageIndexes} from "../../models/ImageModel";
 
 export class TableService {
-  static DB_TABLES = ['ticketContainers', 'projects', 'tickets']
+  static DB_TABLES = ['ticketContainers', 'projects', 'tickets','images']
 
   static createTicketStore(db: IDBPDatabase) {
     const ticketStore = db.createObjectStore('tickets', {
@@ -33,6 +34,14 @@ export class TableService {
     ticketContainerIndexes.forEach(index => {
       ticketContainerStore.createIndex(index, index)
     })
+  }
+  static createImageStore(db: IDBPDatabase) {
+    const imageStore = db.createObjectStore('images', {
+      keyPath: 'id',
+      autoIncrement: true
+    })
+    imageStore.createIndex('id', 'id')
+    imageStore.createIndex('ticketId', 'ticketId')
   }
 
   static updateIndexesForTables(transaction: IDBPTransaction<unknown, string[], 'versionchange'>) {
@@ -70,6 +79,17 @@ export class TableService {
           })
           // delete if index was delete
           Object.values(store.indexNames).filter(index => !ticketIndexes.includes(index)).forEach(index => {
+            store.deleteIndex(index)
+          })
+        }
+          break;
+        case 'images': {
+          // add new indexes
+          imageIndexes.filter(index => !store.indexNames.contains(index)).forEach(index => {
+            store.createIndex(index, index)
+          })
+          // delete if index was delete
+          Object.values(store.indexNames).filter(index => !imageIndexes.includes(index)).forEach(index => {
             store.deleteIndex(index)
           })
         }

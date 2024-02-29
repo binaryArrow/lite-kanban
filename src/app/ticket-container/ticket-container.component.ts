@@ -3,13 +3,14 @@ import {TicketContainerModel} from "../../models/TicketContainerModel";
 import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem} from "@angular/cdk/drag-drop";
 import {severities, TicketModel} from "../../models/TicketModel";
 import {DbService} from "../services/DbService";
-import {faEllipsisV, faPlus, faTrash, faX} from "@fortawesome/free-solid-svg-icons";
+import {faEllipsisV, faPlus, faTrash, faFileUpload} from "@fortawesome/free-solid-svg-icons";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {FormsModule} from "@angular/forms";
 import {MatInputModule} from "@angular/material/input";
 import {TicketComponent} from "../ticket/ticket.component";
 import {NgForOf, NgIf} from "@angular/common";
 import {MatMenuModule} from "@angular/material/menu";
+import {ImageModel} from "../../models/ImageModel";
 
 @Component({
   selector: 'ticket-container',
@@ -23,8 +24,7 @@ import {MatMenuModule} from "@angular/material/menu";
     TicketComponent,
     NgIf,
     NgForOf,
-    MatMenuModule,
-    NgOptimizedImage
+    MatMenuModule
   ],
   templateUrl: './ticket-container.component.html',
   styleUrl: './ticket-container.component.scss',
@@ -38,6 +38,7 @@ export class TicketContainerComponent implements OnInit {
   @ViewChild('titleInput') titleInput!: ElementRef<HTMLInputElement>
   @ViewChild('dialog') dialog!: ElementRef<HTMLDialogElement>
   @ViewChild('deleteConfirmationDialog') deleteConfirmationDialog!: ElementRef<HTMLDialogElement>
+  @ViewChild('deleteImageConfirmationDialog') deleteImageConfirmationDialog!: ElementRef<HTMLDialogElement>
   @ViewChild('ticketTitleInput') ticketTitleInput!: ElementRef<HTMLInputElement>
   @ViewChild('imageUpload') fileUpload!: ElementRef<HTMLInputElement>
 
@@ -58,7 +59,8 @@ export class TicketContainerComponent implements OnInit {
     createDate: '',
     severity: severities[0]
   }
-  pictureData: string = ''
+  imageData: ImageModel[] = []
+  deleteImageId: number = 0
 
   constructor(dbService: DbService) {
     this.dbService = dbService
@@ -69,25 +71,26 @@ export class TicketContainerComponent implements OnInit {
     this.tickets.sort((a, b) => a.index - b.index)
   }
 
-  showModal(event: { show: boolean; ticketId: number }) {
+  async showModal(event: { show: boolean; ticketId: number }) {
     if (event.show) {
       this.openTicket = this.tickets.find(ticket => ticket.id === event.ticketId)
+      await this.setImages(event.ticketId)
       this.dialog.nativeElement.showModal()
       this.ticketTitleInput.nativeElement.blur()
     }
   }
 
   drop(event: CdkDragDrop<TicketModel[], any>) {
-      if (event.previousContainer === event.container) {
-        moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-      } else {
-        transferArrayItem(
-          event.previousContainer.data,
-          event.container.data,
-          event.previousIndex,
-          event.currentIndex,
-        );
-      }
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex,
+      );
+    }
     this.tickets.forEach(async (ticket, index) => {
       ticket.index = index
       ticket.containerId = this.model.id
@@ -138,16 +141,20 @@ export class TicketContainerComponent implements OnInit {
   showContainerDeleteConfirmation() {
     this.deleteConfirmationDialog.nativeElement.showModal()
   }
+  showImageDeleteConfirmation(id: number) {
+    this.deleteImageId = id
+    this.deleteImageConfirmationDialog.nativeElement.showModal()
+  }
 
   async deleteContainer() {
-      this.dbService.deleteTicketContainer(this.model.id).then(() => {
-        this.ticketContainers.splice(this.ticketContainers.indexOf(this.model), 1)
-      })
-      this.deleteConfirmationDialog.nativeElement.close()
+    this.dbService.deleteTicketContainer(this.model.id).then(() => {
+      this.ticketContainers.splice(this.ticketContainers.indexOf(this.model), 1)
+    })
+    this.deleteConfirmationDialog.nativeElement.close()
   }
 
   closeDialogWithClickOutside(event: MouseEvent, element: HTMLDialogElement) {
-    if(event.target === element) {
+    if (event.target === element) {
       element.close()
     }
   }
@@ -156,16 +163,46 @@ export class TicketContainerComponent implements OnInit {
     this.fileUpload.nativeElement.click()
   }
 
-  // TODO: add imagedata to tickets and display uploaded images in ticket
   uploadImage() {
     const files = this.fileUpload.nativeElement.files
     if (files) {
-      const reader = new FileReader()
-      reader.readAsDataURL(files[0])
-      reader.onload = () => {
-        console.log(reader.result)
-        this.pictureData = URL.createObjectURL(files[0])
+      for (let i = 0; i < files.length; i++) {
+        const reader = new FileReader()
+        reader.readAsDataURL(files[i])
+        reader.onload = () => {
+          this.dbService.addNewImage(reader.result!!.toString(), this.openTicket!!.id).then(async () => {
+            await this.setImages(this.openTicket!!.id)
+          })
+        }
       }
     }
+  }
+
+  async base64toBlob(base64string: string): Promise<Blob> {
+    return await (await fetch(base64string)).blob()
+  }
+
+  async setImages(ticketId: number) {
+    this.imageData = (await this.dbService.getAllImagesFromTickets(ticketId))
+    if (this.imageData.length > 0) {
+      this.imageData.forEach(image => {
+        this.base64toBlob(image.imageBase64String).then(res => {
+          image.imageURL = URL.createObjectURL(res)
+        })
+      })
+    } else {
+      this.imageData = []
+    }
+  }
+
+  openImage(imageUrl: string) {
+    window.open(imageUrl)
+  }
+
+  deleteImage() {
+    this.dbService.deleteImage(this.deleteImageId).then(async () => {
+      this.imageData = this.imageData.filter(image => image.id !== this.deleteImageId)
+      this.deleteImageConfirmationDialog.nativeElement.close()
+    })
   }
 }
