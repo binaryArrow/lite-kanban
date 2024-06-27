@@ -31,11 +31,14 @@ body{
   justify-content: center;
   align-items: center;
   border-radius: 3px;
-  height: 50px;
+  height: auto;
   margin: auto auto 10px;
   width: 96%;
   position: relative;
   text-align: center;
+  word-wrap: break-word;
+  white-space: wrap;
+  word-break: break-word;
 }
 .ticket-wrapper:hover {
   cursor: pointer;

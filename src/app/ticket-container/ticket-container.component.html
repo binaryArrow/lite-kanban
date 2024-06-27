@@ -4,15 +4,15 @@
   class="ticket-container h-full w-72 bg-container ml-5 rounded overflow-auto"
   (cdkDropListDropped)="drop($event)">
   <div class="flex">
-    <input (keyup.enter)="modelChanged()" #titleInput
-           class="title_input border-b-2 bg-container focus:outline-none border-containerHover2 focus:border-containerHover3"
-           (focusout)="modelChanged()" type="text" [(ngModel)]="model.title">
     <button class="fa_icon_scaling p-2" [matMenuTriggerFor]="menu">
       <fa-icon [icon]="faEllipsisV"/>
     </button>
     <mat-menu #menu="matMenu">
       <button mat-menu-item (click)="showContainerDeleteConfirmation()">Delete</button>
     </mat-menu>
+    <input (keyup.enter)="modelChanged()" #titleInput
+           class="title_input border-b-2 bg-container focus:outline-none border-containerHover2 focus:border-containerHover3"
+           (focusout)="modelChanged()" type="text" [(ngModel)]="model.title">
   </div>
   <dialog #deleteConfirmationDialog class="delete-dialog w-64 h-16 bg-containerHover overflow-hidden"
           (click)="closeDialogWithClickOutside($event, deleteConfirmationDialog)">
