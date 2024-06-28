@@ -1,3 +1,10 @@
 # Kanban board with browser's indexed DB
+This is a Kanban Board which can be used to organize your Projects. It can be installed as a PWA to work offline (click on `install` on URL bar in Browser).
+You can create Multiple Boards and multiple Containers.
 
-This is a small Project to organize other small projects without the need to create an account in some Kanban dashboard tool. One can use this directly in the browser, everything is saved in the browser's indexdb, so be careful clearing browser data.
+Feel free to contribute.
+
+## Roadmap
+- include markdown editor
+- switch to dexie (current idb) for indexedDB
+- export/import board to share accross devices
