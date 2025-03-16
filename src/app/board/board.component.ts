@@ -8,17 +8,15 @@ import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import {faPlus} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
-  selector: 'board',
-  standalone: true,
-  imports: [
-    NgForOf,
-    TicketContainerComponent,
-    CdkDropListGroup,
-    FontAwesomeModule
-  ],
-  templateUrl: './board.component.html',
-  styleUrl: './board.component.scss',
-  providers: [DbService]
+    selector: 'board',
+    imports: [
+        TicketContainerComponent,
+        CdkDropListGroup,
+        FontAwesomeModule
+    ],
+    templateUrl: './board.component.html',
+    styleUrl: './board.component.scss',
+    providers: [DbService]
 })
 export class BoardComponent {
   @Input() containers: TicketContainerModel[] = []

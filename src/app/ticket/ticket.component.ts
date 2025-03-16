@@ -4,14 +4,12 @@ import {CdkDrag} from "@angular/cdk/drag-drop";
 import {FormsModule} from "@angular/forms";
 
 @Component({
-  selector: 'ticket',
-  standalone: true,
-  imports: [
-    CdkDrag,
-    FormsModule
-  ],
-  templateUrl: './ticket.component.html',
-  styleUrl: './ticket.component.scss'
+    selector: 'ticket',
+    imports: [
+        FormsModule
+    ],
+    templateUrl: './ticket.component.html',
+    styleUrl: './ticket.component.scss'
 })
 export class TicketComponent {
   @Input() ticketModel: TicketModel = {} as TicketModel

@@ -16,25 +16,22 @@ import {NgForOf, NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 
 @Component({
-  selector: 'menu-sidebar',
-  standalone: true,
-  imports: [
-    MatSidenavModule,
-    MatListModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatButtonModule,
-    RouterLink,
-    RouterLinkActive,
-    BoardComponent,
-    FaIconComponent,
-    NgForOf,
-    FormsModule,
-    NgIf
-  ],
-  providers: [DbService],
-  templateUrl: './menu-sidebar.component.html',
-  styleUrl: './menu-sidebar.component.scss'
+    selector: 'menu-sidebar',
+    imports: [
+        MatSidenavModule,
+        MatListModule,
+        MatToolbarModule,
+        MatIconModule,
+        MatButtonModule,
+        BoardComponent,
+        FaIconComponent,
+        NgForOf,
+        FormsModule,
+        NgIf
+    ],
+    providers: [DbService],
+    templateUrl: './menu-sidebar.component.html',
+    styleUrl: './menu-sidebar.component.scss'
 })
 export class MenuSidebarComponent implements OnInit {
   @ViewChild('projectTitleInput') projectTitleInput!: ElementRef<HTMLInputElement>

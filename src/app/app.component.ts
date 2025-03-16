@@ -5,11 +5,10 @@ import {BoardComponent} from "./board/board.component";
 import {MenuSidebarComponent} from "./menu-sidebar/menu-sidebar.component";
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [CommonModule, RouterOutlet, BoardComponent, MenuSidebarComponent],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+    selector: 'app-root',
+    imports: [CommonModule, RouterOutlet, MenuSidebarComponent],
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.scss'
 })
 export class AppComponent {
   title = 'canban2';

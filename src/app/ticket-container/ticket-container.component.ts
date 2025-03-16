@@ -13,24 +13,22 @@ import {MatMenuModule} from "@angular/material/menu";
 import {ImageModel} from "../../models/ImageModel";
 
 @Component({
-  selector: 'ticket-container',
-  standalone: true,
-  imports: [
-    CdkDropList,
-    CdkDrag,
-    FaIconComponent,
-    FormsModule,
-    MatInputModule,
-    TicketComponent,
-    NgIf,
-    NgForOf,
-    MatMenuModule
-  ],
-  templateUrl: './ticket-container.component.html',
-  styleUrl: './ticket-container.component.scss',
-  providers: [
-    DbService
-  ]
+    selector: 'ticket-container',
+    imports: [
+        CdkDropList,
+        CdkDrag,
+        FaIconComponent,
+        FormsModule,
+        MatInputModule,
+        TicketComponent,
+        NgForOf,
+        MatMenuModule
+    ],
+    templateUrl: './ticket-container.component.html',
+    styleUrl: './ticket-container.component.scss',
+    providers: [
+        DbService
+    ]
 })
 export class TicketContainerComponent implements OnInit {
   @Input() model: TicketContainerModel = {title: 'NEW', id: 0, projectId: 0}
