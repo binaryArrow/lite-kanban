@@ -1,7 +1,6 @@
 import {Component} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {RouterOutlet} from '@angular/router';
-import {BoardComponent} from "./board/board.component";
 import {MenuSidebarComponent} from "./menu-sidebar/menu-sidebar.component";
 
 @Component({

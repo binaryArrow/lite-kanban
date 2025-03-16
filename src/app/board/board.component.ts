@@ -1,5 +1,4 @@
 import {Component, Input} from '@angular/core';
-import {NgForOf} from "@angular/common";
 import {TicketContainerComponent} from "../ticket-container/ticket-container.component";
 import {TicketContainerModel} from "../../models/TicketContainerModel";
 import {CdkDropListGroup} from "@angular/cdk/drag-drop";

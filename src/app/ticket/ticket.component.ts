@@ -1,6 +1,5 @@
 import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {severities, TicketModel} from "../../models/TicketModel";
-import {CdkDrag} from "@angular/cdk/drag-drop";
 import {FormsModule} from "@angular/forms";
 
 @Component({
