@@ -3,7 +3,7 @@
   [cdkDropListData]="tickets"
   class="ticket-container h-full w-72 bg-container ml-5 rounded overflow-auto"
   (cdkDropListDropped)="drop($event)">
-  <div class="flex">
+  <div class="flex sticky top-0 z-10 bg-container mb-2">
     <button class="fa_icon_scaling p-2" [matMenuTriggerFor]="menu">
       <fa-icon [icon]="faEllipsisV"/>
     </button>
