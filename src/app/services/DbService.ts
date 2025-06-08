@@ -122,7 +122,13 @@ export class DbService {
 
   async deleteTicket(ticketId: number) {
     const db = await openDB('Canban', this.DB_VERSION)
-    return await db.delete('tickets', ticketId)
+    return await db.delete('tickets', ticketId).then(() => {
+      db.getAllFromIndex('images', 'ticketId', ticketId).then((res: ImageModel[]) => {
+        res.forEach(image => {
+          this.deleteImage(image.id)
+        })
+      })
+    })
   }
 
   async getTicketsForContainer(containerId: number) {

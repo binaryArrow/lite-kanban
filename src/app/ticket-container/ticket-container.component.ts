@@ -174,6 +174,7 @@ export class TicketContainerComponent implements OnInit {
           })
         }
       }
+      this.fileUpload.nativeElement.value = ''
     }
   }
 
