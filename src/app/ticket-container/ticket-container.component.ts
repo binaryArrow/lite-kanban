@@ -13,26 +13,26 @@ import {MatMenuModule} from "@angular/material/menu";
 import {ImageModel} from "../../models/ImageModel";
 
 @Component({
-    selector: 'ticket-container',
-    imports: [
-        CdkDropList,
-        CdkDrag,
-        FaIconComponent,
-        FormsModule,
-        MatInputModule,
-        TicketComponent,
-        NgForOf,
-        MatMenuModule
-    ],
-    templateUrl: './ticket-container.component.html',
-    styleUrl: './ticket-container.component.scss',
-    providers: [
-        DbService
-    ]
+  selector: 'ticket-container',
+  imports: [
+    CdkDropList,
+    CdkDrag,
+    FaIconComponent,
+    FormsModule,
+    MatInputModule,
+    TicketComponent,
+    NgForOf,
+    MatMenuModule
+  ],
+  templateUrl: './ticket-container.component.html',
+  styleUrl: './ticket-container.component.scss',
+  providers: [
+    DbService
+  ]
 })
 export class TicketContainerComponent implements OnInit {
-  @Input() model: TicketContainerModel = {title: 'NEW', id: 0, projectId: 0}
   @Input() ticketContainers: TicketContainerModel[] = []
+  @Input() model: TicketContainerModel = {title: 'NEW', id: 0, projectId: 0, order: this.ticketContainers.length}
   @ViewChild('titleInput') titleInput!: ElementRef<HTMLInputElement>
   @ViewChild('dialog') dialog!: ElementRef<HTMLDialogElement>
   @ViewChild('deleteConfirmationDialog') deleteConfirmationDialog!: ElementRef<HTMLDialogElement>
@@ -139,6 +139,7 @@ export class TicketContainerComponent implements OnInit {
   showContainerDeleteConfirmation() {
     this.deleteConfirmationDialog.nativeElement.showModal()
   }
+
   showImageDeleteConfirmation(id: number) {
     this.deleteImageId = id
     this.deleteImageConfirmationDialog.nativeElement.showModal()

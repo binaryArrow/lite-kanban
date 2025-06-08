@@ -10,7 +10,7 @@ import {ImageModel} from "../../models/ImageModel";
 @Injectable()
 export class DbService {
   db: any
-  DB_VERSION = 3
+  DB_VERSION = 4
 
   async initDB() {
     const createTables = (db: IDBPDatabase) => {
@@ -38,6 +38,7 @@ export class DbService {
           }
           if (newVersion && oldVersion < newVersion) {
             TableService.updateIndexesForTables(transaction)
+            TableService.addOrdersToTicketContainers(transaction)
           }
         }
       })
@@ -59,11 +60,12 @@ export class DbService {
   }
 
   // region: Containers
-  async addNewTicketContainer(projectId: number) {
+  async addNewTicketContainer(projectId: number, order: number) {
     const db = await openDB('Canban', this.DB_VERSION)
     const container = {
       title: 'NEW',
-      projectId: projectId
+      projectId: projectId,
+      order: order
     } as TicketContainerModel
     return await db.add('ticketContainers', container).then(res => {
       return {...container, id: res} as TicketContainerModel
@@ -101,10 +103,10 @@ export class DbService {
     } as TicketModel)
   }
 
-  async addNewTicket(containerId: number,ticketLengths: number) {
+  async addNewTicket(containerId: number, ticketLengths: number) {
     const db = await openDB('Canban', this.DB_VERSION)
     const ticket = {
-      title: `New Ticket ${ticketLengths+1}`,
+      title: `New Ticket ${ticketLengths + 1}`,
       containerId: containerId,
       description: '',
       index: 0,
@@ -140,7 +142,7 @@ export class DbService {
   // endregion
 
   // region: Projects
-  async getAllProjects(): Promise<TicketContainerModel[]> {
+  async getAllProjects(): Promise<ProjectModel[]> {
     return await this.db.transaction('projects').objectStore('projects').getAll()
   }
 
@@ -204,9 +206,10 @@ export class DbService {
     })
   }
 
-async deleteImage(id: number) {
+  async deleteImage(id: number) {
     const db = await openDB('Canban', this.DB_VERSION)
     return await db.delete('images', id)
   }
+
   // endregion
 }

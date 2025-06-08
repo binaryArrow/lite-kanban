@@ -4,7 +4,7 @@
   class="ticket-container h-full w-72 bg-container ml-5 rounded overflow-auto"
   (cdkDropListDropped)="drop($event)">
   <div class="flex sticky top-0 z-10 bg-container mb-2">
-    <button class="fa_icon_scaling p-2" [matMenuTriggerFor]="menu">
+    <button class="fa_icon_hover p-2" [matMenuTriggerFor]="menu">
       <fa-icon [icon]="faEllipsisV"/>
     </button>
     <mat-menu #menu="matMenu">
@@ -73,7 +73,7 @@
           </div>
           <div class="text-center pt-5">
             <label for="image-upload">
-              <button class="fa_icon_scaling" (click)="triggerImageUpload()" title="Upload Image">
+              <button class="fa_icon_hover" (click)="triggerImageUpload()" title="Upload Image">
                 <fa-icon [icon]="faFileUpload" size="2x"></fa-icon>
               </button>
             </label>
@@ -84,7 +84,7 @@
         <div class="flex flex-wrap h-80 overflow-auto">
           @for (image of imageData; track image.id) {
             <div>
-              <button class="ml-2 float-right fa_icon_scaling" (click)="showImageDeleteConfirmation(image.id)" title="Delete Image">
+              <button class="ml-2 float-right fa_icon_hover" (click)="showImageDeleteConfirmation(image.id)" title="Delete Image">
                 <fa-icon [icon]="faTrash"/>
               </button>
               <img src="{{image.imageURL}}" alt="" height="80px" width="180px" class="image_thumbnail"
@@ -95,7 +95,7 @@
       </div>
     </div>
     <div class="relative">
-      <button class="fa_icon_scaling absolute bottom-0 right-0 mb-2 mr-2" (click)="showConfirmation = true" title="Delete Ticket">
+      <button class="fa_icon_hover absolute bottom-0 right-0 mb-2 mr-2" (click)="showConfirmation = true" title="Delete Ticket">
         <fa-icon [icon]="faTrash"/>
       </button>
     </div>

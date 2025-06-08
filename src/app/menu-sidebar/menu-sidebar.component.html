@@ -1,6 +1,8 @@
 <mat-sidenav-container hasBackdrop="true" class="sidenav_container">
   <mat-sidenav #sidenav mode="over" position="start" class="drawer">
-    <div class="font-bold m-1 hover:bg-containerHover hover:cursor-pointer" (click)="selectProject(project)" *ngFor="let project of projects" [title]="project.title">{{project.title}}</div>
+    <div class="font-bold m-1 hover:bg-containerHover hover:cursor-pointer" (click)="selectProject(project)"
+         *ngFor="let project of projects" [title]="project.title">{{ project.title }}
+    </div>
     <button class="m-2 hover:bg-containerHover rounded text-center" (click)="addNewProject()">
       <fa-icon [icon]="faPlus"></fa-icon>
     </button>
@@ -8,25 +10,33 @@
 
   <mat-sidenav-content>
     <mat-toolbar class="toolbar">
-      <button class="fa_icon_scaling pr-2" (click)="sidenav.toggle()">
+      <button class="fa_icon_hover pr-2" (click)="sidenav.toggle()">
         <fa-icon [icon]="faBars"></fa-icon>
       </button>
       <input #projectTitleInput type="text"
              class="disabled:bg-[#212121] text-center focus:outline-none"
-             [disabled]="true" [(ngModel)]="selectedProject.title" (focusout)="projectTitleChanged()" (keyup.enter)="projectTitleChanged()" [title]="selectedProject.title">
+             [disabled]="true" [(ngModel)]="selectedProject.title" (focusout)="projectTitleChanged()"
+             (keyup.enter)="projectTitleChanged()" [title]="selectedProject.title">
       <div>
-        <button class="fa_icon_scaling m-1" (click)="editProjectTitle()">
+        <button class="fa_icon_hover m-1" (click)="editProjectTitle()">
           <fa-icon [icon]="faPencil" size="sm"></fa-icon>
         </button>
-        <button class="fa_icon_scaling m-1" (click)="deleteProject()" *ngIf="projects.length > 1"
+        <button class="fa_icon_hover m-1" (click)="deleteProject()" *ngIf="projects.length > 1"
                 title="delete project">
           <fa-icon [icon]="faTrash" size="sm"></fa-icon>
         </button>
       </div>
       <div class="github-container">
-        <a href="https://github.com/binaryArrow/canban2" class="fa_icon_scaling m-1" title="See Github">
-          <fa-icon [icon]="faGithub"></fa-icon>
-        </a>
+        <div>
+          <a href="https://forms.gle/aqd1PfUNMPdaRqZC9" target="_blank" class="m-1 fa_icon_hover"
+             title="Feedback/Bug Report">
+            <fa-icon [icon]="faBug"></fa-icon>
+          </a>
+          <a href="https://github.com/binaryArrow/canban2" target="_blank" class="m-1 fa_icon_hover"
+             title="Github Page">
+            <fa-icon [icon]="faGithub"></fa-icon>
+          </a>
+        </div>
       </div>
     </mat-toolbar>
     <div class="h-3/4">

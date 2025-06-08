@@ -6,7 +6,7 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
 import {BoardComponent} from "../board/board.component";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
-import {faBars, faPencil, faPlus, faTrash} from "@fortawesome/free-solid-svg-icons";
+import {faBars, faBug, faPencil, faPlus, faTrash} from "@fortawesome/free-solid-svg-icons";
 import {faGithub} from "@fortawesome/free-brands-svg-icons";
 import {TicketContainerModel} from "../../models/TicketContainerModel";
 import {DbService} from "../services/DbService";
@@ -39,6 +39,7 @@ export class MenuSidebarComponent implements OnInit {
   protected readonly faTrash = faTrash;
   protected readonly faPencil = faPencil;
   protected readonly faGithub = faGithub;
+  protected readonly faBug = faBug;
   private dbService: DbService;
   containers: TicketContainerModel[] = []
   projects: ProjectModel[] = []

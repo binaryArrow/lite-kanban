@@ -7,15 +7,15 @@ import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import {faPlus} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
-    selector: 'board',
-    imports: [
-        TicketContainerComponent,
-        CdkDropListGroup,
-        FontAwesomeModule
-    ],
-    templateUrl: './board.component.html',
-    styleUrl: './board.component.scss',
-    providers: [DbService]
+  selector: 'board',
+  imports: [
+    TicketContainerComponent,
+    CdkDropListGroup,
+    FontAwesomeModule
+  ],
+  templateUrl: './board.component.html',
+  styleUrl: './board.component.scss',
+  providers: [DbService]
 })
 export class BoardComponent {
   @Input() containers: TicketContainerModel[] = []
@@ -28,7 +28,8 @@ export class BoardComponent {
   }
 
   async addNewContainer(projectId: number) {
-    this.dbService.addNewTicketContainer(projectId).then(res => {
+    const newOrder = this.containers.length > 0 ? Math.max(...this.containers.map(container => container.order)) + 1 : 0;
+    this.dbService.addNewTicketContainer(projectId, newOrder).then(res => {
       if (res) {
         this.containers.push(res)
       }

@@ -17,11 +17,13 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 }
-html{
+
+html {
   height: 100%;
   background-color: #121212;
 }
-body{
+
+body {
   height: 100%;
   background-color: #121212;
 }
@@ -40,21 +42,22 @@ body{
   white-space: wrap;
   word-break: break-word;
 }
+
 .ticket-wrapper:hover {
   cursor: pointer;
 }
+
 .delete-dialog {
   box-shadow: 0 4px 5px rgb(0 0 0 / 30%);
   border: 2px solid #6b6b6b;
   border-radius: 5px;
 }
 
-.fa_icon_scaling:hover {
-  transform: scale(1.4);
-  transition: transform 0.2s;
+.fa_icon_hover:hover {
+  @apply opacity-70;
 }
 
-textarea{
+textarea {
   resize: none;
 }
 

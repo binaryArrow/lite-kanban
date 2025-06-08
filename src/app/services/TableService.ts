@@ -1,11 +1,11 @@
 import {IDBPDatabase, IDBPTransaction} from "idb";
-import {indexes as ticketContainerIndexes} from "../../models/TicketContainerModel";
-import {indexes as projectIndexes} from "../../models/ProjectModel";
+import {indexes as ticketContainerIndexes, TicketContainerModel} from "../../models/TicketContainerModel";
+import {indexes as projectIndexes, ProjectModel} from "../../models/ProjectModel";
 import {indexes as ticketIndexes} from "../../models/TicketModel";
 import {indexes as imageIndexes} from "../../models/ImageModel";
 
 export class TableService {
-  static DB_TABLES = ['ticketContainers', 'projects', 'tickets','images']
+  static DB_TABLES = ['ticketContainers', 'projects', 'tickets', 'images']
 
   static createTicketStore(db: IDBPDatabase) {
     const ticketStore = db.createObjectStore('tickets', {
@@ -35,6 +35,7 @@ export class TableService {
       ticketContainerStore.createIndex(index, index)
     })
   }
+
   static createImageStore(db: IDBPDatabase) {
     const imageStore = db.createObjectStore('images', {
       keyPath: 'id',
@@ -96,5 +97,18 @@ export class TableService {
           break;
       }
     })
+  }
+// UPDATE: add orders to ticket containers
+  static async addOrdersToTicketContainers(transaction: IDBPTransaction<unknown, string[], 'versionchange'>) {
+    const projects: ProjectModel[] = await transaction.objectStore('projects').getAll()
+    for (const project of projects) {
+      const ticketContainers: TicketContainerModel[] = await transaction.objectStore('ticketContainers').index('projectId').getAll(project.id)
+      ticketContainers.forEach((container, index) => {
+        if (!container.order) {
+          container.order = index
+          transaction.objectStore('ticketContainers').put(container)
+        }
+      })
+    }
   }
 }
