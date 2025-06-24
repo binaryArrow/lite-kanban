@@ -11,7 +11,7 @@ export class UpdatesService {
 
   constructor() {
     const appIsStable$ = this.appRef.isStable.pipe(first((isStable) => isStable));
-    const everySixHours$ = interval(1000);
+    const everySixHours$ = interval(6 * 60 * 60 * 1000);
     const everySixHoursOnceAppIsStable$ = concat(appIsStable$, everySixHours$);
     everySixHoursOnceAppIsStable$.subscribe(async () => {
       try {
