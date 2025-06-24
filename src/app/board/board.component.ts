@@ -2,7 +2,7 @@ import {Component, Input} from '@angular/core';
 import {TicketContainerComponent} from "../ticket-container/ticket-container.component";
 import {TicketContainerModel} from "../../models/TicketContainerModel";
 import {CdkDropListGroup} from "@angular/cdk/drag-drop";
-import {DbService} from "../services/DbService";
+import {DbService} from "../services/db.service";
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import {faPlus} from "@fortawesome/free-solid-svg-icons";
 

@@ -3,7 +3,7 @@ import {format} from "date-fns";
 import {TicketContainerModel} from "../../models/TicketContainerModel";
 import {severities, TicketModel} from "../../models/TicketModel";
 import {Injectable} from "@angular/core";
-import {TableService} from "./TableService";
+import {TableService} from "./table.service";
 import {ProjectModel} from "../../models/ProjectModel";
 import {ImageModel} from "../../models/ImageModel";
 

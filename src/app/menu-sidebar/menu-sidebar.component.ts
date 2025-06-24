@@ -9,7 +9,7 @@ import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {faBars, faBug, faPencil, faPlus, faTrash} from "@fortawesome/free-solid-svg-icons";
 import {faGithub} from "@fortawesome/free-brands-svg-icons";
 import {TicketContainerModel} from "../../models/TicketContainerModel";
-import {DbService} from "../services/DbService";
+import {DbService} from "../services/db.service";
 import {ProjectModel} from "../../models/ProjectModel";
 import {NgForOf, NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
