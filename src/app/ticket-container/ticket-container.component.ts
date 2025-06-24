@@ -2,7 +2,7 @@ import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {TicketContainerModel} from "../../models/TicketContainerModel";
 import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem} from "@angular/cdk/drag-drop";
 import {severities, TicketModel} from "../../models/TicketModel";
-import {DbService} from "../services/DbService";
+import {DbService} from "../services/db.service";
 import {faEllipsisV, faPlus, faTrash, faFileUpload} from "@fortawesome/free-solid-svg-icons";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {FormsModule} from "@angular/forms";
@@ -107,6 +107,7 @@ export class TicketContainerComponent implements OnInit {
   }
 
   modelChanged() {
+    this.ticketContainers = this.ticketContainers.sort((a, b) => a.order - b.order);
     this.dbService.putTicketContainer(this.model).then()
     this.titleInput.nativeElement.blur()
   }
@@ -204,5 +205,14 @@ export class TicketContainerComponent implements OnInit {
       this.imageData = this.imageData.filter(image => image.id !== this.deleteImageId)
       this.deleteImageConfirmationDialog.nativeElement.close()
     })
+  }
+
+  moveContainerLeft() {
+    [this.ticketContainers[this.ticketContainers.indexOf(this.model) - 1], this.model] = [this.model, this.ticketContainers[this.ticketContainers.indexOf(this.model) - 1]]
+    console.log(this.model)
+  }
+
+  moveContainerRight() {
+    console.log(this.model)
   }
 }
