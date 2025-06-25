@@ -19,6 +19,7 @@ export class UpdatesService {
         if (updateFound && confirm('A new version is available. Update now?')) {
           window.location.reload();
         }
+        console.log('no new version found');
       } catch (err) {
         console.error('Failed to check for updates:', err);
       }
