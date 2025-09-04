@@ -9,6 +9,14 @@
     </button>
     <mat-menu #menu="matMenu">
       <button mat-menu-item (click)="showContainerDeleteConfirmation()">Delete</button>
+      <div class="flex">
+        <button mat-menu-item (click)="boardService.moveContainerLeft(this.model)">
+          <fa-icon [icon]="faArrowLeft"></fa-icon>
+        </button>
+        <button mat-menu-item (click)="moveContainerRight()">
+          <fa-icon [icon]="faArrowRight"></fa-icon>
+        </button>
+      </div>
     </mat-menu>
     <input (keyup.enter)="modelChanged()" #titleInput
            class="title_input border-b-2 bg-container focus:outline-none border-containerHover2 focus:border-containerHover3"
