@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, model, OnInit, ViewChild} from "@angular/core";
+import {Component, ElementRef, Input, OnInit, ViewChild} from "@angular/core";
 import {TicketContainerModel} from "../../models/TicketContainerModel";
 import {
   CdkDrag,

@@ -1,4 +1,4 @@
-import {Injectable, OnInit} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {TicketContainerModel} from "../../models/TicketContainerModel";
 import {DbService} from "./db.service";
 import {ProjectModel} from "../../models/ProjectModel";
