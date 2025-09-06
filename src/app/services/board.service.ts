@@ -21,10 +21,12 @@ export class BoardService {
       container.order = index;
       return container
     })
+    if (this.containers[this.containers.indexOf(model)].order <= 0) return;
     this.containers[this.containers.indexOf(model)].order -= 1
     this.containers[this.containers.indexOf(model) - 1].order += 1;
+    this.dbService.putTicketContainer(this.containers[this.containers.indexOf(model)])
+    this.dbService.putTicketContainer(this.containers[this.containers.indexOf(model) - 1])
     this.containers = this.containers.sort((a, b) => a.order - b.order);
-    console.log(this.containers)
   }
 
 }

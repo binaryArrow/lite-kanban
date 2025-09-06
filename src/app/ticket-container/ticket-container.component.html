@@ -10,7 +10,7 @@
     <mat-menu #menu="matMenu">
       <button mat-menu-item (click)="showContainerDeleteConfirmation()">Delete</button>
       <div class="flex">
-        <button mat-menu-item (click)="boardService.moveContainerLeft(this.model)">
+        <button [disabled]="model.order <= 0" mat-menu-item (click)="boardService.moveContainerLeft(model)">
           <fa-icon [icon]="faArrowLeft"></fa-icon>
         </button>
         <button mat-menu-item (click)="moveContainerRight()">

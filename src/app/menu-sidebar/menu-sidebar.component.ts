@@ -28,7 +28,6 @@ import {BoardService} from "../services/board.service";
     FormsModule,
     NgIf
   ],
-  providers: [DbService],
   templateUrl: './menu-sidebar.component.html',
   styleUrl: './menu-sidebar.component.scss'
 })

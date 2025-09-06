@@ -89,7 +89,7 @@ export class DbService {
 
   async putTicketContainer(model: TicketContainerModel) {
     const db = await openDB('Canban', this.DB_VERSION)
-    await db.put('ticketContainers', {title: model.title, id: model.id, projectId: model.projectId})
+    await db.put('ticketContainers', {title: model.title, id: model.id, projectId: model.projectId, order: model.order})
   }
 
   async deleteTicketContainer(containerId: number) {
@@ -167,7 +167,7 @@ export class DbService {
     return await db
       .getAllFromIndex("ticketContainers", "projectId", projectId)
       .then((res) => {
-        return res as TicketContainerModel[];
+        return (res as TicketContainerModel[]).sort((a, b) => a.order - b.order);
       });
   }
 
