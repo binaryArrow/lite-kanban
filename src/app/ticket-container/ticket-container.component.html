@@ -10,10 +10,11 @@
     <mat-menu #menu="matMenu">
       <button mat-menu-item (click)="showContainerDeleteConfirmation()">Delete</button>
       <div class="flex">
-        <button [disabled]="model.order <= 0" mat-menu-item (click)="boardService.moveContainerLeft(model)">
+        <button [disabled]="model.order <= 0" mat-menu-item (click)="boardService.moveContainer(model)">
           <fa-icon [icon]="faArrowLeft"></fa-icon>
         </button>
-        <button mat-menu-item (click)="moveContainerRight()">
+        <button [disabled]="model.order+1 >= ticketContainers.length" mat-menu-item
+                (click)="boardService.moveContainer(model, 'right')">
           <fa-icon [icon]="faArrowRight"></fa-icon>
         </button>
       </div>
@@ -92,7 +93,8 @@
         <div class="flex flex-wrap h-80 overflow-auto">
           @for (image of imageData; track image.id) {
             <div>
-              <button class="ml-2 float-right fa_icon_hover" (click)="showImageDeleteConfirmation(image.id)" title="Delete Image">
+              <button class="ml-2 float-right fa_icon_hover" (click)="showImageDeleteConfirmation(image.id)"
+                      title="Delete Image">
                 <fa-icon [icon]="faTrash"/>
               </button>
               <img src="{{image.imageURL}}" alt="" height="80px" width="180px" class="image_thumbnail"
@@ -103,7 +105,8 @@
       </div>
     </div>
     <div class="relative">
-      <button class="fa_icon_hover absolute bottom-0 right-0 mb-2 mr-2" (click)="showConfirmation = true" title="Delete Ticket">
+      <button class="fa_icon_hover absolute bottom-0 right-0 mb-2 mr-2" (click)="showConfirmation = true"
+              title="Delete Ticket">
         <fa-icon [icon]="faTrash"/>
       </button>
     </div>

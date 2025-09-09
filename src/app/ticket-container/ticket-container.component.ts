@@ -238,9 +238,4 @@ export class TicketContainerComponent implements OnInit {
       this.deleteImageConfirmationDialog.nativeElement.close();
     });
   }
-
-  moveContainerRight() {
-    console.log(this.model);
-    console.log(this.tickets)
-  }
 }

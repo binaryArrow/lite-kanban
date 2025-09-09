@@ -3,6 +3,8 @@ import {TicketContainerModel} from "../../models/TicketContainerModel";
 import {DbService} from "./db.service";
 import {ProjectModel} from "../../models/ProjectModel";
 
+type MoveDirection = 'left' | 'right';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -16,17 +18,25 @@ export class BoardService {
   ) {
   }
 
-  moveContainerLeft(model: TicketContainerModel) {
+  moveContainer(model: TicketContainerModel, moveDirection: MoveDirection = 'left') {
     this.containers = this.containers.map((container, index) => {
       container.order = index;
       return container
     })
-    if (this.containers[this.containers.indexOf(model)].order <= 0) return;
-    this.containers[this.containers.indexOf(model)].order -= 1
-    this.containers[this.containers.indexOf(model) - 1].order += 1;
+    if (moveDirection === 'right') {
+      if (this.containers[this.containers.indexOf(model)].order >= this.containers.length - 1) return;
+      this.containers[this.containers.indexOf(model)].order += 1
+      this.containers[this.containers.indexOf(model) + 1].order -= 1;
+    } else {
+      if (this.containers[this.containers.indexOf(model)].order <= 0) return;
+      this.containers[this.containers.indexOf(model)].order -= 1
+      this.containers[this.containers.indexOf(model) - 1].order += 1;
+    }
     this.dbService.putTicketContainer(this.containers[this.containers.indexOf(model)])
-    this.dbService.putTicketContainer(this.containers[this.containers.indexOf(model) - 1])
+    if (moveDirection === 'left')
+      this.dbService.putTicketContainer(this.containers[this.containers.indexOf(model) - 1])
+    else
+      this.dbService.putTicketContainer(this.containers[this.containers.indexOf(model) + 1])
     this.containers = this.containers.sort((a, b) => a.order - b.order);
   }
-
 }
