@@ -2,7 +2,7 @@
   @for(container of containers; track container.id){
   <ticket-container [model]="container" [ticketContainers]="containers"></ticket-container>
   }
-  <button class="bg-container hover:bg-containerHover rounded p-0.5 ml-5 mr-5 text-center" (click)="addNewContainer(projectId)">
+  <button class="h-2/3 sm:h-full bg-container hover:bg-containerHover rounded p-0.5 ml-5 mr-5 text-center" (click)="addNewContainer(projectId)">
     <fa-icon [icon]="faPlus"/>
   </button>
 </div>
