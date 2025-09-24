@@ -62,5 +62,6 @@ textarea {
 }
 
 .drawer {
-  width: 15% !important;
+  width: 20% !important;
+  @apply min-w-52;
 }

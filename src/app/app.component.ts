@@ -1,12 +1,11 @@
 import {Component} from '@angular/core';
-import {CommonModule} from '@angular/common';
 import {RouterOutlet} from '@angular/router';
 import {MenuSidebarComponent} from "./menu-sidebar/menu-sidebar.component";
 import {UpdatesService} from "./services/updates.service";
 
 @Component({
     selector: 'app-root',
-    imports: [CommonModule, RouterOutlet, MenuSidebarComponent],
+    imports: [RouterOutlet, MenuSidebarComponent],
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss'
 })

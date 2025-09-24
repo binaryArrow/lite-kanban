@@ -14,32 +14,32 @@
           <fa-icon [icon]="faArrowLeft"></fa-icon>
         </button>
         <button [disabled]="model.order+1 >= ticketContainers.length" mat-menu-item
-                (click)="boardService.moveContainer(model, 'right')">
+          (click)="boardService.moveContainer(model, 'right')">
           <fa-icon [icon]="faArrowRight"></fa-icon>
         </button>
       </div>
     </mat-menu>
     <input (keyup.enter)="modelChanged()" #titleInput
-           class="title_input border-b-2 bg-container focus:outline-none border-containerHover2 focus:border-containerHover3"
-           (focusout)="modelChanged()" type="text" [(ngModel)]="model.title">
+      class="title_input border-b-2 bg-container focus:outline-none border-containerHover2 focus:border-containerHover3"
+      (focusout)="modelChanged()" type="text" [(ngModel)]="model.title">
   </div>
   <dialog #deleteConfirmationDialog class="delete-dialog w-64 h-16 bg-containerHover overflow-hidden"
-          (click)="closeDialogWithClickOutside($event, deleteConfirmationDialog)">
+    (click)="closeDialogWithClickOutside($event, deleteConfirmationDialog)">
     <div>
       <h3> Delete Container?</h3>
       <button class="bg-containerHover hover:bg-containerHover2"
-              (click)="deleteContainer()">Yes
+        (click)="deleteContainer()">Yes
       </button>
       <button class="bg-containerHover hover:bg-containerHover2 m-2" (click)="deleteConfirmationDialog.close()">No
       </button>
     </div>
   </dialog>
   <dialog #deleteImageConfirmationDialog class="delete-dialog w-64 h-16 bg-containerHover overflow-hidden"
-          (click)="closeDialogWithClickOutside($event, deleteImageConfirmationDialog)">
+    (click)="closeDialogWithClickOutside($event, deleteImageConfirmationDialog)">
     <div>
       <h3> Delete Image?</h3>
       <button class="bg-containerHover hover:bg-containerHover2"
-              (click)="deleteImage()">Yes
+        (click)="deleteImage()">Yes
       </button>
       <button class="bg-containerHover hover:bg-containerHover2 m-2" (click)="deleteImageConfirmationDialog.close()">No
       </button>
@@ -55,17 +55,17 @@
   </div>
 
   <dialog #dialog class="delete-dialog bg-container" (close)="closeModal()"
-          (click)="closeDialogWithClickOutside($event, dialog)">
+    (click)="closeDialogWithClickOutside($event, dialog)">
     <div class="grid grid-cols-3 w-[800px]">
       <input #ticketTitleInput
-             class="ml-3 mb-2 mr-3 border-b-2 bg-container focus:outline-none border-containerHover2 focus:border-containerHover3 col-span-2 text-center"
-             spellcheck="false"
-             (focusout)="saveTicket()" (keyup.enter)="saveTicket()"
-             [(ngModel)]="openTicket!!.title">
+        class="ml-3 mb-2 mr-3 border-b-2 bg-container focus:outline-none border-containerHover2 focus:border-containerHover3 col-span-2 text-center"
+        spellcheck="false"
+        (focusout)="saveTicket()" (keyup.enter)="saveTicket()"
+        [(ngModel)]="openTicket!!.title">
       <textarea
         class="col-start-1 col-span-2 m-3 col bg-containerHover outline-none rounded p-2 border-b-2 focus:outline-none border-containerHover2 focus:border-containerHover3"
         rows="25" spellcheck="false"
-        [(ngModel)]="openTicket!!.description" (focusout)="saveTicket()"></textarea>
+      [(ngModel)]="openTicket!!.description" (focusout)="saveTicket()"></textarea>
       <div>
         <div class="p-1">
           <div class="text-start">
@@ -75,8 +75,10 @@
             <div>
               <label for="severity">Severity </label>
               <select id="severity" class="mt-5 bg-containerHover" [(ngModel)]="openTicket!!.severity"
-                      (change)="saveTicket()">
-                <option *ngFor="let severity of severities" [value]="severity">{{ severity }}</option>
+                (change)="saveTicket()">
+                @for (severity of severities; track severity) {
+                  <option [value]="severity">{{ severity }}</option>
+                }
               </select>
             </div>
           </div>
@@ -87,18 +89,18 @@
               </button>
             </label>
             <input type="file" accept="image/png, image/jpeg, image/jpg" (change)="uploadImage()" multiple
-                   id="image-upload" #imageUpload>
+              id="image-upload" #imageUpload>
           </div>
         </div>
         <div class="flex flex-wrap h-80 overflow-auto">
           @for (image of imageData; track image.id) {
             <div>
               <button class="ml-2 float-right fa_icon_hover" (click)="showImageDeleteConfirmation(image.id)"
-                      title="Delete Image">
+                title="Delete Image">
                 <fa-icon [icon]="faTrash"/>
               </button>
               <img src="{{image.imageURL}}" alt="" height="80px" width="180px" class="image_thumbnail"
-                   (click)="openImage(image.imageURL)">
+                (click)="openImage(image.imageURL)">
             </div>
           }
         </div>
@@ -106,7 +108,7 @@
     </div>
     <div class="relative">
       <button class="fa_icon_hover absolute bottom-0 right-0 mb-2 mr-2" (click)="showConfirmation = true"
-              title="Delete Ticket">
+        title="Delete Ticket">
         <fa-icon [icon]="faTrash"/>
       </button>
     </div>

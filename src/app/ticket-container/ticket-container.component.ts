@@ -21,7 +21,6 @@ import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {FormsModule} from "@angular/forms";
 import {MatInputModule} from "@angular/material/input";
 import {TicketComponent} from "../ticket/ticket.component";
-import {NgForOf} from "@angular/common";
 import {MatMenuModule} from "@angular/material/menu";
 import {ImageModel} from "../../models/ImageModel";
 import {BoardService} from "../services/board.service";
@@ -35,9 +34,8 @@ import {BoardService} from "../services/board.service";
     FormsModule,
     MatInputModule,
     TicketComponent,
-    NgForOf,
-    MatMenuModule,
-  ],
+    MatMenuModule
+],
   templateUrl: "./ticket-container.component.html",
   styleUrl: "./ticket-container.component.scss",
 })

@@ -10,7 +10,6 @@ import {faBars, faBug, faPencil, faPlus, faTrash} from "@fortawesome/free-solid-
 import {faGithub} from "@fortawesome/free-brands-svg-icons";
 import {DbService} from "../services/db.service";
 import {ProjectModel} from "../../models/ProjectModel";
-import {NgForOf, NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {BoardService} from "../services/board.service";
 
@@ -24,10 +23,8 @@ import {BoardService} from "../services/board.service";
     MatButtonModule,
     BoardComponent,
     FaIconComponent,
-    NgForOf,
-    FormsModule,
-    NgIf
-  ],
+    FormsModule
+],
   templateUrl: './menu-sidebar.component.html',
   styleUrl: './menu-sidebar.component.scss'
 })

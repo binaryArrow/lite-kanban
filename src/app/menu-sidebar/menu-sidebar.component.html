@@ -1,8 +1,10 @@
 <mat-sidenav-container hasBackdrop="true" class="sidenav_container">
   <mat-sidenav #sidenav mode="over" position="start" class="drawer">
-    <div class="font-bold m-1 hover:bg-containerHover hover:cursor-pointer" (click)="selectProject(project)"
-         *ngFor="let project of boardService.projects" [title]="project.title">{{ project.title }}
-    </div>
+    @for (project of boardService.projects; track project) {
+      <div class="font-bold m-1 hover:bg-containerHover hover:cursor-pointer" (click)="selectProject(project)"
+        [title]="project.title">{{ project.title }}
+      </div>
+    }
     <button class="m-2 hover:bg-containerHover rounded text-center" (click)="addNewProject()">
       <fa-icon [icon]="faPlus"></fa-icon>
     </button>
@@ -14,26 +16,28 @@
         <fa-icon [icon]="faBars"></fa-icon>
       </button>
       <input #projectTitleInput type="text"
-             class="disabled:bg-[#212121] text-center focus:outline-none"
-             [disabled]="true" [(ngModel)]="boardService.selectedProject.title" (focusout)="projectTitleChanged()"
-             (keyup.enter)="projectTitleChanged()" [title]="boardService.selectedProject.title">
+        class="disabled:bg-[#212121] text-center focus:outline-none"
+        [disabled]="true" [(ngModel)]="boardService.selectedProject.title" (focusout)="projectTitleChanged()"
+        (keyup.enter)="projectTitleChanged()" [title]="boardService.selectedProject.title">
       <div>
         <button class="fa_icon_hover m-1" (click)="editProjectTitle()">
           <fa-icon [icon]="faPencil" size="sm"></fa-icon>
         </button>
-        <button class="fa_icon_hover m-1" (click)="deleteProject()" *ngIf="boardService.projects.length > 1"
-                title="delete project">
-          <fa-icon [icon]="faTrash" size="sm"></fa-icon>
-        </button>
+        @if (boardService.projects.length > 1) {
+          <button class="fa_icon_hover m-1" (click)="deleteProject()"
+            title="delete project">
+            <fa-icon [icon]="faTrash" size="sm"></fa-icon>
+          </button>
+        }
       </div>
       <div class="github-container">
         <div>
           <a href="https://forms.gle/aqd1PfUNMPdaRqZC9" target="_blank" class="m-1 fa_icon_hover"
-             title="Feedback/Bug Report">
+            title="Feedback/Bug Report">
             <fa-icon [icon]="faBug"></fa-icon>
           </a>
           <a href="https://github.com/binaryArrow/canban2" target="_blank" class="m-1 fa_icon_hover"
-             title="Github Page">
+            title="Github Page">
             <fa-icon [icon]="faGithub"></fa-icon>
           </a>
         </div>
