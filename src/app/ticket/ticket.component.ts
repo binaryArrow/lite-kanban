@@ -8,7 +8,7 @@ import {FormsModule} from "@angular/forms";
         FormsModule
     ],
     templateUrl: './ticket.component.html',
-    styleUrl: './ticket.component.scss'
+    styleUrl: './ticket.component.css'
 })
 export class TicketComponent {
   @Input() ticketModel: TicketModel = {} as TicketModel

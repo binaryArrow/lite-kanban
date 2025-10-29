@@ -26,7 +26,7 @@ import {BoardService} from "../services/board.service";
     FormsModule
 ],
   templateUrl: './menu-sidebar.component.html',
-  styleUrl: './menu-sidebar.component.scss'
+  styleUrl: './menu-sidebar.component.css'
 })
 export class MenuSidebarComponent implements OnInit {
   @ViewChild('projectTitleInput') projectTitleInput!: ElementRef<HTMLInputElement>

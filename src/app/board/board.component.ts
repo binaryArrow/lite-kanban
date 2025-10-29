@@ -14,7 +14,7 @@ import {faPlus} from "@fortawesome/free-solid-svg-icons";
     FontAwesomeModule
   ],
   templateUrl: './board.component.html',
-  styleUrl: './board.component.scss'
+  styleUrl: './board.component.css'
 })
 export class BoardComponent {
   @Input() containers: TicketContainerModel[] = []

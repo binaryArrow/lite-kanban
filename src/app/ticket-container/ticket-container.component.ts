@@ -37,7 +37,7 @@ import {BoardService} from "../services/board.service";
     MatMenuModule
 ],
   templateUrl: "./ticket-container.component.html",
-  styleUrl: "./ticket-container.component.scss",
+  styleUrl: "./ticket-container.component.css",
 })
 export class TicketContainerComponent implements OnInit {
   @Input() ticketContainers: TicketContainerModel[] = []
