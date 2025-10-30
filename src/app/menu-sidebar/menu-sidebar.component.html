@@ -1,36 +1,36 @@
 <mat-sidenav-container hasBackdrop="true" class="sidenav_container">
   <mat-sidenav #sidenav mode="over" position="start" class="drawer">
     @for (project of boardService.projects; track project) {
-      <div class="font-bold m-1 hover:bg-containerHover hover:cursor-pointer" (click)="selectProject(project)"
+      <div class="font-bold m-1 hover:bg-container-hover hover:cursor-pointer" (click)="selectProject(project)"
            [title]="project.title">{{ project.title }}
       </div>
     }
-    <button class="m-2 hover:bg-containerHover rounded text-center" (click)="addNewProject()">
+    <button class="m-2 hover:bg-container-hover rounded text-center" (click)="addNewProject()">
       <fa-icon [icon]="faPlus"></fa-icon>
     </button>
   </mat-sidenav>
 
   <mat-sidenav-content class="overflow-y-hidden">
     <mat-toolbar class="toolbar">
-      <button class="fa_icon_hover pr-2" (click)="sidenav.toggle()">
+      <button class="fa_icon_hover pr-2 hover:cursor-pointer" (click)="sidenav.toggle()">
         <fa-icon [icon]="faBars"></fa-icon>
       </button>
       <input #projectTitleInput type="text"
-             class="disabled:bg-[#212121] text-center focus:outline-none"
+             class="disabled:bg-[#212121] text-center focus:outline-none focus:bg-container-hover/70"
              [disabled]="true" [(ngModel)]="boardService.selectedProject.title" (focusout)="projectTitleChanged()"
              (keyup.enter)="projectTitleChanged()" [title]="boardService.selectedProject.title">
       <div>
-        <button class="fa_icon_hover m-1" (click)="editProjectTitle()">
+        <button class="fa_icon_hover m-1 hover:cursor-pointer" (click)="editProjectTitle()">
           <fa-icon [icon]="faPencil" size="sm"></fa-icon>
         </button>
         @if (boardService.projects.length > 1) {
-          <button class="fa_icon_hover m-1" (click)="deleteProject()"
+          <button class="fa_icon_hover m-1 hover:cursor-pointer" (click)="deleteProject()"
                   title="delete project">
             <fa-icon [icon]="faTrash" size="sm"></fa-icon>
           </button>
         }
       </div>
-      <div class="github-container">
+      <div class="hidden sm:grid justify-end">
         <div>
           <a href="https://forms.gle/aqd1PfUNMPdaRqZC9" target="_blank" class="m-1 fa_icon_hover"
              title="Feedback/Bug Report">

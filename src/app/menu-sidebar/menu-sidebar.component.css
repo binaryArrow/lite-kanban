@@ -16,7 +16,3 @@
   }
   background-color: #212121;
 }
-
-.github-container {
-  @apply hidden sm:grid justify-end;
-}

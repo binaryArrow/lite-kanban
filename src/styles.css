@@ -1,7 +1,31 @@
 /* You can add global styles to this file, and also import other style files */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@theme {
+  --color-*: initial;
+  --color-container: #3c3c3c;
+  --color-container-hover: #525252;
+  --color-container-hover2: #6b6b6b;
+  --color-container-hover3: #b6b2b2;
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
 
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -54,7 +78,7 @@ body {
 }
 
 .fa_icon_hover:hover {
-  @apply opacity-70;
+  opacity: 0.7;
 }
 
 textarea {
@@ -63,5 +87,5 @@ textarea {
 
 .drawer {
   width: 20% !important;
-  @apply min-w-52;
+  min-width: 13rem;
 }
