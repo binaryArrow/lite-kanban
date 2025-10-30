@@ -27,11 +27,6 @@
   margin-right: 6%;
 }
 
-.ticket_dialog::backdrop {
-  background-color: #3c3c3c;
-  opacity: 0.7;
-  border: none;
-}
 
 .confirm_dialog {
   border-radius: 5px;

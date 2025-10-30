@@ -56,15 +56,15 @@
 
   <dialog #dialog class="delete-dialog bg-container" (close)="closeModal()"
     (click)="closeDialogWithClickOutside($event, dialog)">
-    <div class="grid grid-cols-3 w-[800px]">
+    <div class="grid grid-cols-1 w-80 sm:grid-cols-3 sm:w-[800px]">
       <input #ticketTitleInput
         class="ml-3 mb-2 mr-3 border-b-2 bg-container focus:outline-none border-container-hover2 focus:border-container-hover3 col-span-2 text-center"
         spellcheck="false"
         (focusout)="saveTicket()" (keyup.enter)="saveTicket()"
         [(ngModel)]="openTicket!!.title">
       <textarea
-        class="col-start-1 col-span-2 m-3 col bg-container-hover outline-none rounded p-2 border-b-2 focus:outline-none border-container-hover2 focus:border-container-hover3"
-        rows="25" spellcheck="false"
+        class="col-start-1 col-span-2 m-3 col bg-container-hover outline-none rounded p-2 border-b-2 focus:outline-none border-container-hover2
+         focus:border-container-hover3 h-80 sm:h-[625px]" spellcheck="false"
       [(ngModel)]="openTicket!!.description" (focusout)="saveTicket()"></textarea>
       <div class="flex flex-col justify-between">
         <div class="p-1">
@@ -74,7 +74,7 @@
           <div class="text-start">
             <div>
               <label for="severity">Severity </label>
-              <select id="severity" class="mt-5 bg-container-hover" [(ngModel)]="openTicket!!.severity"
+              <select id="severity" class="mt-5 bg-container-hover hover:cursor-pointer" [(ngModel)]="openTicket!!.severity"
                 (change)="saveTicket()">
                 @for (severity of severities; track severity) {
                   <option [value]="severity">{{ severity }}</option>
