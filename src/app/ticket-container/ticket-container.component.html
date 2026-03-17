@@ -8,13 +8,13 @@
       <fa-icon [icon]="faEllipsisV"/>
     </button>
     <mat-menu #menu="matMenu">
-      <button mat-menu-item (click)="showContainerDeleteConfirmation()">Delete</button>
-      <button mat-menu-item (click)="showClearTicketsConfirmation()">Clear tickets</button>
+      <button mat-menu-item (click)="showContainerDeleteConfirmation()" title="Delete this Container">Delete</button>
+      <button mat-menu-item (click)="showClearTicketsConfirmation()" title="Delete all tickets inside this Container">Clear tickets</button>
       <div class="flex">
-        <button [disabled]="model.order <= 0" mat-menu-item (click)="boardService.moveContainer(model)">
+        <button title="Move the Container to the left" [disabled]="model.order <= 0" mat-menu-item (click)="boardService.moveContainer(model)">
           <fa-icon [icon]="faArrowLeft"></fa-icon>
         </button>
-        <button [disabled]="model.order+1 >= ticketContainers.length" mat-menu-item
+        <button title="Move the Container to the right" [disabled]="model.order+1 >= ticketContainers.length" mat-menu-item
           (click)="boardService.moveContainer(model, 'right')">
           <fa-icon [icon]="faArrowRight"></fa-icon>
         </button>
@@ -50,7 +50,7 @@
 
   <dialog #dialog class="delete-dialog bg-container" (close)="closeModal()"
     (click)="closeDialogWithClickOutside($event, dialog)">
-    <div class="grid grid-cols-1 w-80 sm:grid-cols-3 sm:w-[800px]">
+    <div class="grid grid-cols-1 w-80 sm:grid-cols-3 sm:w-200">
       <input #ticketTitleInput
         class="ml-3 mb-2 mr-3 border-b-2 bg-container focus:outline-none border-container-hover2 focus:border-container-hover3 col-span-2 text-center"
         spellcheck="false"
@@ -58,7 +58,7 @@
         [(ngModel)]="openTicket!!.title">
       <textarea
         class="col-start-1 col-span-2 m-3 col bg-container-hover outline-none rounded p-2 border-b-2 focus:outline-none border-container-hover2
-         focus:border-container-hover3 h-80 sm:h-[625px]" spellcheck="false"
+         focus:border-container-hover3 h-80 sm:h-156.25" spellcheck="false"
       [(ngModel)]="openTicket!!.description" (focusout)="saveTicket()"></textarea>
       <div class="flex flex-col justify-between">
         <div class="p-1">
@@ -110,8 +110,8 @@
       <div class="confirm_dialog bg-container-hover absolute bottom-3 right-10">
         Delete Ticket?
         <div>
-          <button class="bg-container-hover hover:bg-container-hover2" (click)="deleteTicket()">Yes</button>
-          <button class="bg-container-hover hover:bg-container-hover2 m-2" (click)="showConfirmation = false">No</button>
+          <button class="bg-container-hover fa_icon_hover" (click)="deleteTicket()">Yes</button>
+          <button class="bg-container-hover fa_icon_hover m-2" (click)="showConfirmation = false">No</button>
         </div>
       </div>
     }

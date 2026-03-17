@@ -37,7 +37,7 @@ import {ConfirmationDialogComponent} from "../confirmation-dialog/confirmation-d
     TicketComponent,
     MatMenuModule,
     ConfirmationDialogComponent
-],
+  ],
   templateUrl: "./ticket-container.component.html",
   styleUrl: "./ticket-container.component.css",
 })
@@ -127,11 +127,13 @@ export class TicketContainerComponent implements OnInit {
     this.dbService
       .addNewTicket(this.model.id, this.tickets.length)
       .then(async (response) => {
-        this.tickets.unshift(response as TicketModel);
+        const newTicket = response as TicketModel;
+        this.tickets.unshift(newTicket);
         for (let i = 1; i < this.tickets.length; i++) {
           this.tickets[i].index = i;
           await this.dbService.putTicket(this.tickets[i]);
         }
+        await this.showModal({show: true, ticketId: newTicket.id});
       });
   }
 
