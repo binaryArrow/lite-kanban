@@ -9,6 +9,7 @@
     </button>
     <mat-menu #menu="matMenu">
       <button mat-menu-item (click)="showContainerDeleteConfirmation()">Delete</button>
+      <button mat-menu-item (click)="showClearTicketsConfirmation()">Clear tickets</button>
       <div class="flex">
         <button [disabled]="model.order <= 0" mat-menu-item (click)="boardService.moveContainer(model)">
           <fa-icon [icon]="faArrowLeft"></fa-icon>
@@ -23,28 +24,21 @@
       class="title_input border-b-2 bg-container focus:outline-none border-container-hover2 focus:border-container-hover3"
       (focusout)="modelChanged()" type="text" [(ngModel)]="model.title">
   </div>
-  <dialog #deleteConfirmationDialog class="delete-dialog w-64 h-16 bg-container-hover overflow-hidden"
-    (click)="closeDialogWithClickOutside($event, deleteConfirmationDialog)">
-    <div>
-      <h3> Delete Container?</h3>
-      <button class="bg-container-hover hover:bg-container-hover2"
-        (click)="deleteContainer()">Yes
-      </button>
-      <button class="bg-container-hover hover:bg-container-hover2 m-2" (click)="deleteConfirmationDialog.close()">No
-      </button>
-    </div>
-  </dialog>
-  <dialog #deleteImageConfirmationDialog class="delete-dialog w-64 h-16 bg-container-hover overflow-hidden"
-    (click)="closeDialogWithClickOutside($event, deleteImageConfirmationDialog)">
-    <div>
-      <h3> Delete Image?</h3>
-      <button class="bg-container-hover hover:bg-container-hover2"
-        (click)="deleteImage()">Yes
-      </button>
-      <button class="bg-container-hover hover:bg-container-hover2 m-2" (click)="deleteImageConfirmationDialog.close()">No
-      </button>
-    </div>
-  </dialog>
+  <confirmation-dialog
+    #deleteContainerDialog
+    header="Delete Container?"
+    (confirmed)="deleteContainer()">
+  </confirmation-dialog>
+  <confirmation-dialog
+    #deleteImageDialog
+    header="Delete Image?"
+    (confirmed)="deleteImage()">
+  </confirmation-dialog>
+  <confirmation-dialog
+    #clearTicketsDialog
+    header="Clear all tickets?"
+    (confirmed)="clearTickets()">
+  </confirmation-dialog>
   <div>
     <button class="m-2 hover:bg-container-hover rounded text-center" (click)="addNewTicket()">
       <fa-icon [icon]="faPlus"></fa-icon>

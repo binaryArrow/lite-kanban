@@ -24,6 +24,7 @@ import {TicketComponent} from "../ticket/ticket.component";
 import {MatMenuModule} from "@angular/material/menu";
 import {ImageModel} from "../../models/ImageModel";
 import {BoardService} from "../services/board.service";
+import {ConfirmationDialogComponent} from "../confirmation-dialog/confirmation-dialog.component";
 
 @Component({
   selector: "ticket-container",
@@ -34,7 +35,8 @@ import {BoardService} from "../services/board.service";
     FormsModule,
     MatInputModule,
     TicketComponent,
-    MatMenuModule
+    MatMenuModule,
+    ConfirmationDialogComponent
 ],
   templateUrl: "./ticket-container.component.html",
   styleUrl: "./ticket-container.component.css",
@@ -49,10 +51,12 @@ export class TicketContainerComponent implements OnInit {
   };
   @ViewChild("titleInput") titleInput!: ElementRef<HTMLInputElement>;
   @ViewChild("dialog") dialog!: ElementRef<HTMLDialogElement>;
-  @ViewChild("deleteConfirmationDialog")
-  deleteConfirmationDialog!: ElementRef<HTMLDialogElement>;
-  @ViewChild("deleteImageConfirmationDialog")
-  deleteImageConfirmationDialog!: ElementRef<HTMLDialogElement>;
+  @ViewChild("deleteContainerDialog")
+  deleteContainerDialog!: ConfirmationDialogComponent;
+  @ViewChild("deleteImageDialog")
+  deleteImageDialog!: ConfirmationDialogComponent;
+  @ViewChild("clearTicketsDialog")
+  clearTicketsDialog!: ConfirmationDialogComponent;
   @ViewChild("ticketTitleInput")
   ticketTitleInput!: ElementRef<HTMLInputElement>;
   @ViewChild("imageUpload") fileUpload!: ElementRef<HTMLInputElement>;
@@ -164,19 +168,29 @@ export class TicketContainerComponent implements OnInit {
   }
 
   showContainerDeleteConfirmation() {
-    this.deleteConfirmationDialog.nativeElement.showModal();
+    this.deleteContainerDialog.open();
   }
 
   showImageDeleteConfirmation(id: number) {
     this.deleteImageId = id;
-    this.deleteImageConfirmationDialog.nativeElement.showModal();
+    this.deleteImageDialog.open();
+  }
+
+  protected showClearTicketsConfirmation() {
+    this.clearTicketsDialog.open();
+  }
+
+  async clearTickets() {
+    for (const ticket of this.tickets) {
+      await this.dbService.deleteTicket(ticket.id);
+    }
+    this.tickets = [];
   }
 
   async deleteContainer() {
     this.dbService.deleteTicketContainer(this.model.id).then(() => {
       this.ticketContainers.splice(this.ticketContainers.indexOf(this.model), 1)
     })
-    this.deleteConfirmationDialog.nativeElement.close()
   }
 
   closeDialogWithClickOutside(event: MouseEvent, element: HTMLDialogElement) {
@@ -233,7 +247,6 @@ export class TicketContainerComponent implements OnInit {
       this.imageData = this.imageData.filter(
         (image) => image.id !== this.deleteImageId,
       );
-      this.deleteImageConfirmationDialog.nativeElement.close();
     });
   }
 }
