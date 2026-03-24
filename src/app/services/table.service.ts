@@ -3,9 +3,10 @@ import {indexes as ticketContainerIndexes, TicketContainerModel} from "../../mod
 import {indexes as projectIndexes, ProjectModel} from "../../models/ProjectModel";
 import {indexes as ticketIndexes} from "../../models/TicketModel";
 import {indexes as imageIndexes} from "../../models/ImageModel";
+import {configIndexes} from "../../models/ConfigModel";
 
 export class TableService {
-  static DB_TABLES = ['ticketContainers', 'projects', 'tickets', 'images']
+  static DB_TABLES = ['ticketContainers', 'projects', 'tickets', 'images', 'configs']
 
   static createTicketStore(db: IDBPDatabase) {
     const ticketStore = db.createObjectStore('tickets', {
@@ -23,7 +24,6 @@ export class TableService {
     })
     projectStore.createIndex('id', 'id')
     projectStore.put({title: 'New Project', id: 0})
-
   }
 
   static createTicketContainerStore(db: IDBPDatabase) {
@@ -43,6 +43,15 @@ export class TableService {
     })
     imageStore.createIndex('id', 'id')
     imageStore.createIndex('ticketId', 'ticketId')
+  }
+
+  static createConfigStore(db: IDBPDatabase) {
+    const configStore = db.createObjectStore('configs', {
+      keyPath: 'id',
+      autoIncrement: true
+    })
+    configStore.createIndex('id', 'id')
+    configStore.createIndex('configName', 'configName' )
   }
 
   static updateIndexesForTables(transaction: IDBPTransaction<unknown, string[], 'versionchange'>) {
@@ -95,6 +104,14 @@ export class TableService {
           })
         }
           break;
+        case 'configs': {
+          configIndexes.filter(index => !store.indexNames.contains(index)).forEach(index => {
+            store.createIndex(index, index)
+          })
+          Object.values(store.indexNames).filter(index => !configIndexes.includes(index)).forEach(index => {
+            store.deleteIndex(index)
+          })
+        }
       }
     })
   }
@@ -110,5 +127,10 @@ export class TableService {
         }
       })
     }
+  }
+
+  static addConfig(transaction: IDBPTransaction<unknown, string[], 'versionchange'>, configName: string, configValue: any) {
+    const configs = transaction.objectStore('configs')
+    return configs.add({configName, value: configValue})
   }
 }

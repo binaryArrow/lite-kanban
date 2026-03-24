@@ -1,18 +1,18 @@
-import { IDBPDatabase, openDB } from "idb";
-import { format } from "date-fns";
-import { TicketContainerModel } from "../../models/TicketContainerModel";
-import { severities, TicketModel } from "../../models/TicketModel";
-import { Injectable } from "@angular/core";
-import { TableService } from "./table.service";
-import { ProjectModel } from "../../models/ProjectModel";
-import { ImageModel } from "../../models/ImageModel";
+import {IDBPDatabase, openDB} from "idb";
+import {format} from "date-fns";
+import {TicketContainerModel} from "../../models/TicketContainerModel";
+import {severities, TicketModel} from "../../models/TicketModel";
+import {Injectable} from "@angular/core";
+import {TableService} from "./table.service";
+import {ProjectModel} from "../../models/ProjectModel";
+import {ImageModel} from "../../models/ImageModel";
 
 @Injectable({
   providedIn: 'root'
 })
 export class DbService {
   db: any;
-  DB_VERSION = 4;
+  DB_VERSION = 5;
 
   async initDB() {
     const createTables = (db: IDBPDatabase) => {
@@ -32,14 +32,26 @@ export class DbService {
             createTables(db);
           } else if (
             transaction.objectStoreNames.length <
-              TableService.DB_TABLES.length &&
+            TableService.DB_TABLES.length &&
             newVersion
           ) {
+            // DB versioning, adding new tables per DB version etc.
             if (oldVersion < 2) {
               TableService.createProjectStore(db);
             }
             if (oldVersion < 3) {
               TableService.createImageStore(db);
+            }
+            if (oldVersion < 5) {
+              TableService.createConfigStore(db);
+              TableService.addConfig(transaction, 'SEVERITY_CONFIG', [
+                {name: '', color: 'black'},
+                {name: 'Lowest', color: 'black'},
+                {name: 'Low', color: 'black'},
+                {name: 'Medium', color: 'black'},
+                {name: 'High', color: 'black'},
+                {name: 'Highest', color: 'black'}
+              ]);
             }
           }
           if (newVersion && oldVersion < newVersion) {
@@ -56,7 +68,7 @@ export class DbService {
           .then((res: TicketContainerModel[]) => {
             console.log(res);
             const newContainers = res.map((container) => {
-              return { ...container, projectId: 0 };
+              return {...container, projectId: 0};
             });
             res.forEach((container: TicketContainerModel) => {
               this.db.delete("ticketContainers", container.id);
@@ -80,7 +92,7 @@ export class DbService {
     return await db
       .add("ticketContainers", container)
       .then((res) => {
-        return { ...container, id: res } as TicketContainerModel;
+        return {...container, id: res} as TicketContainerModel;
       })
       .catch((err) => {
         console.error("something went wrong saving to IDB: " + err);
@@ -131,7 +143,7 @@ export class DbService {
     return await db
       .add("tickets", ticket)
       .then((res) => {
-        return { ...ticket, id: res } as TicketModel;
+        return {...ticket, id: res} as TicketModel;
       })
       .catch((err) => {
         console.error("something went wrong saving to IDB: " + err);
@@ -183,7 +195,7 @@ export class DbService {
 
   async putProject(model: ProjectModel) {
     const db = await openDB("Canban", this.DB_VERSION);
-    await db.put("projects", { title: model.title, id: model.id });
+    await db.put("projects", {title: model.title, id: model.id});
   }
 
   async addNewProject() {
@@ -194,7 +206,7 @@ export class DbService {
     return await db
       .add("projects", project)
       .then((res) => {
-        return { ...project, id: res } as ProjectModel;
+        return {...project, id: res} as ProjectModel;
       })
       .catch((err) => {
         console.error("something went wrong saving to IDB: " + err);
