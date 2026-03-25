@@ -5,3 +5,8 @@ export interface ConfigModel {
 }
 
 export const configIndexes = ['id', 'configName'];
+
+export type SeverityConfig = {
+  name: string
+  color: string
+}

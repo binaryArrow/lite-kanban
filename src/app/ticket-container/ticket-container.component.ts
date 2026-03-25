@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from "@angular/core";
+import {Component, ElementRef, Input, OnInit, signal, ViewChild} from "@angular/core";
 import {TicketContainerModel} from "../../models/TicketContainerModel";
 import {
   CdkDrag,
@@ -7,7 +7,7 @@ import {
   moveItemInArray,
   transferArrayItem,
 } from "@angular/cdk/drag-drop";
-import {severities, TicketModel} from "../../models/TicketModel";
+import {TicketModel} from "../../models/TicketModel";
 import {DbService} from "../services/db.service";
 import {
   faEllipsisV,
@@ -25,6 +25,7 @@ import {MatMenuModule} from "@angular/material/menu";
 import {ImageModel} from "../../models/ImageModel";
 import {BoardService} from "../services/board.service";
 import {ConfirmationDialogComponent} from "../confirmation-dialog/confirmation-dialog.component";
+import {SeverityConfig} from "../../models/ConfigModel";
 
 @Component({
   selector: "ticket-container",
@@ -61,8 +62,8 @@ export class TicketContainerComponent implements OnInit {
   ticketTitleInput!: ElementRef<HTMLInputElement>;
   @ViewChild("imageUpload") fileUpload!: ElementRef<HTMLInputElement>;
 
+  protected severities = signal<SeverityConfig[]>([] as SeverityConfig[]);
   protected readonly faPlus = faPlus;
-  protected readonly severities = severities;
   protected readonly faEllipsisV = faEllipsisV;
   protected readonly faTrash = faTrash;
   protected readonly faFileUpload = faFileUpload;
@@ -77,7 +78,7 @@ export class TicketContainerComponent implements OnInit {
     description: "",
     index: 0,
     createDate: "",
-    severity: severities[0],
+    severity: '',
   };
   imageData: ImageModel[] = [];
   deleteImageId: number = 0;
@@ -88,6 +89,7 @@ export class TicketContainerComponent implements OnInit {
   async ngOnInit() {
     this.tickets = await this.dbService.getTicketsForContainer(this.model.id);
     this.tickets.sort((a, b) => a.index - b.index);
+    this.severities.set(await this.dbService.getAllSeverityConfigs())
   }
 
   async showModal(event: { show: boolean; ticketId: number }) {

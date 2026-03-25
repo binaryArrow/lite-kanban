@@ -44,7 +44,7 @@
       <fa-icon [icon]="faPlus"></fa-icon>
     </button>
     @for (ticket of tickets; track ticket.id) {
-      <ticket (showModalEvent)="showModal($event)" class="ticket-wrapper" [ticketModel]="ticket" cdkDrag></ticket>
+      <ticket (showModalEvent)="showModal($event)" class="ticket-wrapper" [ticketModel]="ticket" [severities]="severities()" cdkDrag></ticket>
     }
   </div>
 
@@ -70,8 +70,8 @@
               <label for="severity">Severity </label>
               <select id="severity" class="mt-5 bg-container-hover hover:cursor-pointer" [(ngModel)]="openTicket!!.severity"
                 (change)="saveTicket()">
-                @for (severity of severities; track severity) {
-                  <option [value]="severity">{{ severity }}</option>
+                @for (severity of severities(); track severity) {
+                  <option [value]="severity.name">{{ severity.name }}</option>
                 }
               </select>
             </div>

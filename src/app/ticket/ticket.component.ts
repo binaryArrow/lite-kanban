@@ -1,38 +1,27 @@
-import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
-import {severities, TicketModel} from "../../models/TicketModel";
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {TicketModel} from "../../models/TicketModel";
 import {FormsModule} from "@angular/forms";
+import {SeverityConfig} from "../../models/ConfigModel";
 
 @Component({
-    selector: 'ticket',
-    imports: [
-        FormsModule
-    ],
-    templateUrl: './ticket.component.html',
-    styleUrl: './ticket.component.css'
+  selector: 'ticket',
+  imports: [
+    FormsModule,
+  ],
+  templateUrl: './ticket.component.html',
+  styleUrl: './ticket.component.css'
 })
 export class TicketComponent {
   @Input() ticketModel: TicketModel = {} as TicketModel
-  @Output() showModalEvent = new EventEmitter<{show: boolean, ticketId: number}>()
-  @ViewChild('dialog') dialog!: ElementRef<HTMLDialogElement>
-  @ViewChild('titleInput') titleInput!: ElementRef<HTMLInputElement>
+  @Input() severities: SeverityConfig[] = []
+  @Output() showModalEvent = new EventEmitter<{ show: boolean, ticketId: number }>()
 
   get severityIndicator() {
-    switch (this.ticketModel.severity) {
-      case severities[1]:
-        return 'background-color: #b9f167'
-      case severities[2]:
-        return 'background-color: #def366'
-      case severities[3]:
-        return 'background-color: #fff644'
-      case severities[4]:
-        return 'background-color: #f3a566'
-      case severities[5]:
-        return 'background-color: #f36666'
-    }
-    return ''
+    const severity = this.severities.filter(severity => severity.name === this.ticketModel.severity)[0]
+    return severity ? `background-color: ${severity.color}` : ''
   }
 
-  showModal(){
+  showModal() {
     this.showModalEvent.emit({show: true, ticketId: this.ticketModel.id})
   }
 

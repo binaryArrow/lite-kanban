@@ -8,13 +8,4 @@ export interface TicketModel {
     severity: string
 }
 
-export const severities = [
-    '',
-    'Lowest',
-    'Low',
-    'Medium',
-    'High',
-    'Highest'
-]
-
 export const indexes = ['id', 'containerId']
