@@ -15,7 +15,7 @@ import {
   faTrash,
   faFileUpload,
   faArrowLeft,
-  faArrowRight,
+  faArrowRight, faGear,
 } from "@fortawesome/free-solid-svg-icons";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {FormsModule} from "@angular/forms";
@@ -26,6 +26,7 @@ import {ImageModel} from "../../models/ImageModel";
 import {BoardService} from "../services/board.service";
 import {ConfirmationDialogComponent} from "../confirmation-dialog/confirmation-dialog.component";
 import {SeverityConfig} from "../../models/ConfigModel";
+import {SeveritySettignsComponent} from "../severity-settings/severity-settigns/severity-settigns.component";
 
 @Component({
   selector: "ticket-container",
@@ -37,7 +38,8 @@ import {SeverityConfig} from "../../models/ConfigModel";
     MatInputModule,
     TicketComponent,
     MatMenuModule,
-    ConfirmationDialogComponent
+    ConfirmationDialogComponent,
+    SeveritySettignsComponent
   ],
   templateUrl: "./ticket-container.component.html",
   styleUrl: "./ticket-container.component.css",
@@ -51,7 +53,7 @@ export class TicketContainerComponent implements OnInit {
     order: this.ticketContainers.length,
   };
   @ViewChild("titleInput") titleInput!: ElementRef<HTMLInputElement>;
-  @ViewChild("dialog") dialog!: ElementRef<HTMLDialogElement>;
+  @ViewChild("ticketModal") ticketModal!: ElementRef<HTMLDialogElement>;
   @ViewChild("deleteContainerDialog")
   deleteContainerDialog!: ConfirmationDialogComponent;
   @ViewChild("deleteImageDialog")
@@ -69,6 +71,7 @@ export class TicketContainerComponent implements OnInit {
   protected readonly faFileUpload = faFileUpload;
   protected readonly faArrowLeft = faArrowLeft;
   protected readonly faArrowRight = faArrowRight;
+  protected readonly faGear = faGear;
   protected showConfirmation = false;
   tickets: TicketModel[] = [];
   openTicket: TicketModel | undefined = {
@@ -83,8 +86,9 @@ export class TicketContainerComponent implements OnInit {
   imageData: ImageModel[] = [];
   deleteImageId: number = 0;
 
-  constructor(public dbService: DbService, public boardService: BoardService) {
-  }
+  openSeveritySettings = signal(false)
+
+  constructor(public dbService: DbService, public boardService: BoardService) {}
 
   async ngOnInit() {
     this.tickets = await this.dbService.getTicketsForContainer(this.model.id);
@@ -98,7 +102,7 @@ export class TicketContainerComponent implements OnInit {
         (ticket) => ticket.id === event.ticketId,
       );
       await this.setImages(event.ticketId);
-      this.dialog.nativeElement.showModal();
+      this.ticketModal.nativeElement.showModal();
       this.ticketTitleInput.nativeElement.blur();
     }
   }
@@ -151,9 +155,10 @@ export class TicketContainerComponent implements OnInit {
     }
   }
 
-  closeModal() {
-    this.dialog.nativeElement.close();
+  closeTicketModal() {
+    this.ticketModal.nativeElement.close();
     this.showConfirmation = false;
+    this.openSeveritySettings.set(false)
   }
 
   deleteTicket() {
@@ -164,8 +169,7 @@ export class TicketContainerComponent implements OnInit {
       if (foundInTickets) {
         this.dbService.deleteTicket(this.openTicket.id).then(() => {
           this.tickets?.splice(this.tickets.indexOf(foundInTickets), 1);
-          this.dialog.nativeElement.close();
-          this.showConfirmation = false;
+          this.closeTicketModal()
         });
       }
     }
