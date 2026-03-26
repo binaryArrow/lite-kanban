@@ -3,7 +3,7 @@ import {indexes as ticketContainerIndexes, TicketContainerModel} from "../../mod
 import {indexes as projectIndexes, ProjectModel} from "../../models/ProjectModel";
 import {indexes as ticketIndexes} from "../../models/TicketModel";
 import {indexes as imageIndexes} from "../../models/ImageModel";
-import {configIndexes} from "../../models/ConfigModel";
+import {configIndexes, ConfigModel, SeverityConfig} from "../../models/ConfigModel";
 
 export class TableService {
   static DB_TABLES = ['ticketContainers', 'projects', 'tickets', 'images', 'configs']
@@ -129,8 +129,18 @@ export class TableService {
     }
   }
 
-  static addConfig(transaction: IDBPTransaction<unknown, string[], 'versionchange'>, configName: string, configValue: any) {
-    const configs = transaction.objectStore('configs')
-    return configs.add({configName, value: configValue})
+  static async ensureDefaultSeverityConfig(db: IDBPDatabase) {
+    const existing: ConfigModel[] = await db.getAllFromIndex("configs", "configName", 'SEVERITY_CONFIG');
+    if (existing.length === 0) {
+      const defaultSeverities: SeverityConfig[] = [
+        {name: 'No Severity', color: '#525252'},
+        {name: 'Lowest', color: '#b9f167'},
+        {name: 'Low', color: '#def366'},
+        {name: 'Medium', color: '#fff644'},
+        {name: 'High', color: '#f3a566'},
+        {name: 'Highest', color: '#f36666'},
+      ];
+      await db.add("configs", {configName: 'SEVERITY_CONFIG', value: defaultSeverities});
+    }
   }
 }

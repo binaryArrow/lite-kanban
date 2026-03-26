@@ -8,10 +8,6 @@
     <button class="fa_icon_hover m-2" title="Create new Project" (click)="addNewProject()">
       <fa-icon [icon]="faPlus"></fa-icon>
     </button>
-    <button>
-      <fa-icon [icon]="faGear" size="sm" class="fa_icon_hover m-2" title="Open settings"
-               (click)="openSeveritySettings.set(true); sidenav.close()"></fa-icon>
-    </button>
   </mat-sidenav>
 
   <mat-sidenav-content class="overflow-y-hidden">
@@ -50,7 +46,6 @@
     <div class="h-full sm:h-3/4">
       <board [containers]="boardService.containers" [projectId]="boardService.selectedProject.id"></board>
     </div>
-    <app-severity-settigns [(open)]="openSeveritySettings"></app-severity-settigns>
   </mat-sidenav-content>
 
 </mat-sidenav-container>

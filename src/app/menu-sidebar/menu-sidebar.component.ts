@@ -25,7 +25,6 @@ import {SeveritySettingsComponent} from "../severity-settings/severity-settigns/
     BoardComponent,
     FaIconComponent,
     FormsModule,
-    SeveritySettingsComponent
   ],
   templateUrl: './menu-sidebar.component.html',
   styleUrl: './menu-sidebar.component.css'
@@ -38,9 +37,6 @@ export class MenuSidebarComponent implements OnInit {
   protected readonly faPencil = faPencil;
   protected readonly faGithub = faGithub;
   protected readonly faBug = faBug;
-  protected readonly faGear = faGear;
-
-  openSeveritySettings = signal(false)
 
   constructor(private dbService: DbService, public boardService: BoardService) {
   }

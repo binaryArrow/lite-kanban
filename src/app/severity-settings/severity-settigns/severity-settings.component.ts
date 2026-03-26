@@ -7,6 +7,7 @@ import {
   viewChild,
 } from '@angular/core';
 import {DbService} from "../../services/db.service";
+import {SeverityConfig} from "../../../models/ConfigModel";
 
 @Component({
   selector: 'app-severity-settigns',
@@ -22,9 +23,9 @@ export class SeveritySettingsComponent {
   constructor() {
     effect(() => {
       const dialog = this.dialogRef().nativeElement;
-      if (this.open() && !dialog.open) {
+      if (this.open()) {
         dialog.showModal();
-      } else if (!this.open() && dialog.open) {
+      } else {
         dialog.close();
       }
     });
@@ -34,5 +35,12 @@ export class SeveritySettingsComponent {
     if (event.target === this.dialogRef().nativeElement) {
       this.open.set(false);
     }
+  }
+  onColorPicked(event: Event, changedSeverity: SeverityConfig) {
+    const input = event.target as HTMLInputElement;
+    const updatedSeverities = this.dbService.severities().map(severity =>
+      severity.name === changedSeverity.name ? {...severity, color: input.value} : severity
+    );
+    this.dbService.putSeverityConfigs(updatedSeverities);
   }
 }

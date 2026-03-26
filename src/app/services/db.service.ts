@@ -22,6 +22,7 @@ export class DbService {
       TableService.createProjectStore(db);
       TableService.createTicketStore(db);
       TableService.createImageStore(db);
+      TableService.createConfigStore(db);
     };
     if (!("indexedDB" in window)) {
       alert("This browser doesn't support IndexedDB.");
@@ -46,25 +47,6 @@ export class DbService {
             }
             if (oldVersion < 5) {
               TableService.createConfigStore(db);
-              TableService.addConfig(transaction, 'SEVERITY_CONFIG',
-                [
-                  {name: '', color: ''},
-                  {
-                    name: 'Lowest',
-                    color: '#b9f167'
-                  },
-                  {name: 'Low', color: '#def366'},
-                  {
-                    name: 'Medium',
-                    color: '#fff644'
-                  },
-                  {name: 'High', color: '#f3a566'},
-                  {
-                    name: 'Highest',
-                    color: '#f36666'
-                  }
-                ] as SeverityConfig[]
-              )
             }
           }
           if (newVersion && oldVersion < newVersion) {
@@ -92,6 +74,7 @@ export class DbService {
           });
       }
     }
+    await TableService.ensureDefaultSeverityConfig(this.db);
     this.severities.set(await this.getAllSeverityConfigs())
   }
 
@@ -152,7 +135,7 @@ export class DbService {
       description: "",
       index: 0,
       createDate: format(new Date(), "dd-MM-yyyy HH:mm"),
-      severity: '',
+      severity: 'No Severity',
     } as TicketModel;
     return await db
       .add("tickets", ticket)
@@ -300,5 +283,12 @@ export class DbService {
       });
   }
 
+  async putSeverityConfigs(severities: SeverityConfig[]) {
+
+    const config: ConfigModel = (await this.db.getAllFromIndex("configs", "configName", 'SEVERITY_CONFIG'))[0]
+    config.value = severities;
+    await this.db.put("configs", config);
+    this.severities.set(severities);
+  }
   // endregion
 }

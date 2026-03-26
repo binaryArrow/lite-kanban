@@ -15,7 +15,7 @@ import {
   faTrash,
   faFileUpload,
   faArrowLeft,
-  faArrowRight,
+  faArrowRight, faGear,
 } from "@fortawesome/free-solid-svg-icons";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {FormsModule} from "@angular/forms";
@@ -25,6 +25,7 @@ import {MatMenuModule} from "@angular/material/menu";
 import {ImageModel} from "../../models/ImageModel";
 import {BoardService} from "../services/board.service";
 import {ConfirmationDialogComponent} from "../confirmation-dialog/confirmation-dialog.component";
+import {SeveritySettingsComponent} from "../severity-settings/severity-settigns/severity-settings.component";
 
 @Component({
   selector: "ticket-container",
@@ -37,6 +38,7 @@ import {ConfirmationDialogComponent} from "../confirmation-dialog/confirmation-d
     TicketComponent,
     MatMenuModule,
     ConfirmationDialogComponent,
+    SeveritySettingsComponent,
   ],
   templateUrl: "./ticket-container.component.html",
   styleUrl: "./ticket-container.component.css",
@@ -67,6 +69,7 @@ export class TicketContainerComponent implements OnInit {
   protected readonly faFileUpload = faFileUpload;
   protected readonly faArrowLeft = faArrowLeft;
   protected readonly faArrowRight = faArrowRight;
+  protected readonly faGear = faGear;
   protected showConfirmation = false;
   tickets: TicketModel[] = [];
   openTicket: TicketModel | undefined = {
@@ -80,6 +83,7 @@ export class TicketContainerComponent implements OnInit {
   };
   imageData: ImageModel[] = [];
   deleteImageId: number = 0;
+  openSeveritySettings = signal(false)
 
 
   constructor(public dbService: DbService, public boardService: BoardService) {}

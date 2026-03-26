@@ -79,6 +79,10 @@
                   <option [value]="severity.name">{{ severity.name }}</option>
                 }
               </select>
+              <button>
+                <fa-icon [icon]="faGear" size="sm" class="fa_icon_hover m-2" title="Change Severity Colors"
+                         (click)="openSeveritySettings.set(true); ticketModal.close()"></fa-icon>
+              </button>
             </div>
           </div>
           <div class="text-center pt-5">
@@ -121,4 +125,5 @@
       </div>
     }
   </dialog>
+  <app-severity-settigns [(open)]="openSeveritySettings"></app-severity-settigns>
 </div>
