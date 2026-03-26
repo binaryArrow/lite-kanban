@@ -15,7 +15,7 @@ import {
   faTrash,
   faFileUpload,
   faArrowLeft,
-  faArrowRight, faGear,
+  faArrowRight,
 } from "@fortawesome/free-solid-svg-icons";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {FormsModule} from "@angular/forms";
@@ -25,8 +25,6 @@ import {MatMenuModule} from "@angular/material/menu";
 import {ImageModel} from "../../models/ImageModel";
 import {BoardService} from "../services/board.service";
 import {ConfirmationDialogComponent} from "../confirmation-dialog/confirmation-dialog.component";
-import {SeverityConfig} from "../../models/ConfigModel";
-import {SeveritySettignsComponent} from "../severity-settings/severity-settigns/severity-settigns.component";
 
 @Component({
   selector: "ticket-container",
@@ -39,7 +37,6 @@ import {SeveritySettignsComponent} from "../severity-settings/severity-settigns/
     TicketComponent,
     MatMenuModule,
     ConfirmationDialogComponent,
-    SeveritySettignsComponent
   ],
   templateUrl: "./ticket-container.component.html",
   styleUrl: "./ticket-container.component.css",
@@ -64,14 +61,12 @@ export class TicketContainerComponent implements OnInit {
   ticketTitleInput!: ElementRef<HTMLInputElement>;
   @ViewChild("imageUpload") fileUpload!: ElementRef<HTMLInputElement>;
 
-  protected severities = signal<SeverityConfig[]>([] as SeverityConfig[]);
   protected readonly faPlus = faPlus;
   protected readonly faEllipsisV = faEllipsisV;
   protected readonly faTrash = faTrash;
   protected readonly faFileUpload = faFileUpload;
   protected readonly faArrowLeft = faArrowLeft;
   protected readonly faArrowRight = faArrowRight;
-  protected readonly faGear = faGear;
   protected showConfirmation = false;
   tickets: TicketModel[] = [];
   openTicket: TicketModel | undefined = {
@@ -86,14 +81,12 @@ export class TicketContainerComponent implements OnInit {
   imageData: ImageModel[] = [];
   deleteImageId: number = 0;
 
-  openSeveritySettings = signal(false)
 
   constructor(public dbService: DbService, public boardService: BoardService) {}
 
   async ngOnInit() {
     this.tickets = await this.dbService.getTicketsForContainer(this.model.id);
     this.tickets.sort((a, b) => a.index - b.index);
-    this.severities.set(await this.dbService.getAllSeverityConfigs())
   }
 
   async showModal(event: { show: boolean; ticketId: number }) {
@@ -158,7 +151,6 @@ export class TicketContainerComponent implements OnInit {
   closeTicketModal() {
     this.ticketModal.nativeElement.close();
     this.showConfirmation = false;
-    this.openSeveritySettings.set(false)
   }
 
   deleteTicket() {

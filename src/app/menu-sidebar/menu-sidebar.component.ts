@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnInit, signal, ViewChild} from '@angular/core';
 import {MatSidenav, MatSidenavModule} from "@angular/material/sidenav";
 import {MatListModule} from "@angular/material/list";
 import {MatToolbarModule} from "@angular/material/toolbar";
@@ -6,12 +6,13 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
 import {BoardComponent} from "../board/board.component";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
-import {faBars, faBug, faPencil, faPlus, faTrash} from "@fortawesome/free-solid-svg-icons";
+import {faBars, faBug, faGear, faPencil, faPlus, faTrash} from "@fortawesome/free-solid-svg-icons";
 import {faGithub} from "@fortawesome/free-brands-svg-icons";
 import {DbService} from "../services/db.service";
 import {ProjectModel} from "../../models/ProjectModel";
 import {FormsModule} from "@angular/forms";
 import {BoardService} from "../services/board.service";
+import {SeveritySettingsComponent} from "../severity-settings/severity-settigns/severity-settings.component";
 
 @Component({
   selector: 'menu-sidebar',
@@ -23,8 +24,9 @@ import {BoardService} from "../services/board.service";
     MatButtonModule,
     BoardComponent,
     FaIconComponent,
-    FormsModule
-],
+    FormsModule,
+    SeveritySettingsComponent
+  ],
   templateUrl: './menu-sidebar.component.html',
   styleUrl: './menu-sidebar.component.css'
 })
@@ -36,6 +38,9 @@ export class MenuSidebarComponent implements OnInit {
   protected readonly faPencil = faPencil;
   protected readonly faGithub = faGithub;
   protected readonly faBug = faBug;
+  protected readonly faGear = faGear;
+
+  openSeveritySettings = signal(false)
 
   constructor(private dbService: DbService, public boardService: BoardService) {
   }

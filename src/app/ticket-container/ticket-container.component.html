@@ -48,11 +48,10 @@
       <fa-icon [icon]="faPlus"></fa-icon>
     </button>
     @for (ticket of tickets; track ticket.id) {
-      <ticket (showModalEvent)="showModal($event)" class="ticket-wrapper" [ticketModel]="ticket"
-              [severities]="severities()" cdkDrag></ticket>
+      <ticket (showModalEvent)="showModal($event)" class="ticket-wrapper" [ticketModel]="ticket" cdkDrag></ticket>
     }
   </div>
-<!--  TODO: refactor this into own component -->
+  <!--  TODO: refactor this into own component -->
   <dialog #ticketModal class="delete-dialog bg-container" (close)="closeTicketModal()"
           (click)="closeDialogWithClickOutside($event, ticketModal)">
     <div class="grid grid-cols-1 w-80 sm:grid-cols-3 sm:w-200">
@@ -76,13 +75,10 @@
               <select id="severity" class="mt-5 bg-container-hover hover:cursor-pointer"
                       [(ngModel)]="openTicket!!.severity"
                       (change)="saveTicket()">
-                @for (severity of severities(); track severity) {
+                @for (severity of dbService.severities(); track severity) {
                   <option [value]="severity.name">{{ severity.name }}</option>
                 }
               </select>
-              <button class="fa_icon_hover p-2" title="Edit Severity Colors" (click)="openSeveritySettings.set(true)">
-                <fa-icon [icon]="faGear"/>
-              </button>
             </div>
           </div>
           <div class="text-center pt-5">
@@ -124,8 +120,5 @@
         </div>
       </div>
     }
-    <app-severity-settigns [open]="openSeveritySettings()"></app-severity-settigns>
   </dialog>
-
-
 </div>

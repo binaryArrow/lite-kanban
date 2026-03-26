@@ -1,0 +1,12 @@
+<dialog #dialog class="delete-dialog bg-container"
+        (click)="onDialogClick($event)">
+  Severity Color Config
+  <div class="w-50 h-50">
+    @for (severity of dbService.severities(); track severity) {
+      <div class="flex">
+        <div>{{ severity.name }}</div>
+        <input type="color" [value]="severity.color"/>
+      </div>
+    }
+  </div>
+</dialog>

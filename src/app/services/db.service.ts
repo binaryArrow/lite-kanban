@@ -2,7 +2,7 @@ import {IDBPDatabase, openDB} from "idb";
 import {format} from "date-fns";
 import {TicketContainerModel} from "../../models/TicketContainerModel";
 import {TicketModel} from "../../models/TicketModel";
-import {Injectable} from "@angular/core";
+import {Injectable, signal} from "@angular/core";
 import {TableService} from "./table.service";
 import {ProjectModel} from "../../models/ProjectModel";
 import {ImageModel} from "../../models/ImageModel";
@@ -14,6 +14,7 @@ import {ConfigModel, SeverityConfig} from "../../models/ConfigModel";
 export class DbService {
   db: any;
   DB_VERSION = 5;
+  severities = signal<SeverityConfig[]>([]);
 
   async initDB() {
     const createTables = (db: IDBPDatabase) => {
@@ -45,21 +46,25 @@ export class DbService {
             }
             if (oldVersion < 5) {
               TableService.createConfigStore(db);
-              TableService.addConfig(transaction, 'SEVERITY_CONFIG', {name: '', color: ''} as SeverityConfig)
-              TableService.addConfig(transaction, 'SEVERITY_CONFIG', {
-                name: 'Lowest',
-                color: '#b9f167'
-              } as SeverityConfig)
-              TableService.addConfig(transaction, 'SEVERITY_CONFIG', {name: 'Low', color: '#def366'} as SeverityConfig)
-              TableService.addConfig(transaction, 'SEVERITY_CONFIG', {
-                name: 'Medium',
-                color: '#fff644'
-              } as SeverityConfig)
-              TableService.addConfig(transaction, 'SEVERITY_CONFIG', {name: 'High', color: '#f3a566'} as SeverityConfig)
-              TableService.addConfig(transaction, 'SEVERITY_CONFIG', {
-                name: 'Highest',
-                color: '#f36666'
-              } as SeverityConfig)
+              TableService.addConfig(transaction, 'SEVERITY_CONFIG',
+                [
+                  {name: '', color: ''},
+                  {
+                    name: 'Lowest',
+                    color: '#b9f167'
+                  },
+                  {name: 'Low', color: '#def366'},
+                  {
+                    name: 'Medium',
+                    color: '#fff644'
+                  },
+                  {name: 'High', color: '#f3a566'},
+                  {
+                    name: 'Highest',
+                    color: '#f36666'
+                  }
+                ] as SeverityConfig[]
+              )
             }
           }
           if (newVersion && oldVersion < newVersion) {
@@ -87,6 +92,7 @@ export class DbService {
           });
       }
     }
+    this.severities.set(await this.getAllSeverityConfigs())
   }
 
   // region: Containers
@@ -290,8 +296,7 @@ export class DbService {
   async getAllSeverityConfigs(): Promise<SeverityConfig[]> {
     return await this.db.getAllFromIndex("configs", "configName", 'SEVERITY_CONFIG')
       .then((res: ConfigModel[]) => {
-        const severityConfigs: SeverityConfig[] = res.map((config) => config.value)
-        return severityConfigs;
+        return res[0].value as SeverityConfig[];
       });
   }
 

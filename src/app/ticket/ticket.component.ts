@@ -1,7 +1,7 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, inject, Input, Output} from '@angular/core';
 import {TicketModel} from "../../models/TicketModel";
 import {FormsModule} from "@angular/forms";
-import {SeverityConfig} from "../../models/ConfigModel";
+import { DbService } from "../services/db.service";
 
 @Component({
   selector: 'ticket',
@@ -13,11 +13,11 @@ import {SeverityConfig} from "../../models/ConfigModel";
 })
 export class TicketComponent {
   @Input() ticketModel: TicketModel = {} as TicketModel
-  @Input() severities: SeverityConfig[] = []
   @Output() showModalEvent = new EventEmitter<{ show: boolean, ticketId: number }>()
+  dbService = inject(DbService)
 
   get severityIndicator() {
-    const severity = this.severities.filter(severity => severity.name === this.ticketModel.severity)[0]
+    const severity = this.dbService.severities().filter(severity => severity.name === this.ticketModel.severity)[0]
     return severity ? `background-color: ${severity.color}` : ''
   }
 
