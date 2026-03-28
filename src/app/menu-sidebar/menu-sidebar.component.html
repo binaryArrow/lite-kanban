@@ -1,6 +1,6 @@
 <mat-sidenav-container hasBackdrop="true" class="sidenav_container">
   <mat-sidenav #sidenav mode="over" position="start" class="drawer">
-    @for (project of boardService.projects; track project) {
+    @for (project of boardService.projects(); track project) {
       <div class="font-bold m-1 hover:bg-container-hover hover:cursor-pointer" (click)="selectProject(project)"
            [title]="project.title">{{ project.title }}
       </div>
@@ -17,13 +17,13 @@
       </button>
       <input #projectTitleInput type="text"
              class="disabled:bg-[#212121] text-center focus:outline-none focus:bg-container-hover/70"
-             [disabled]="true" [(ngModel)]="boardService.selectedProject.title" (focusout)="projectTitleChanged()"
-             (keyup.enter)="projectTitleChanged()" [title]="boardService.selectedProject.title">
+             [disabled]="true" [ngModel]="selectedProjectTitle()" (ngModelChange)="selectedProjectTitle.set($event)" (focusout)="projectTitleChanged()"
+             (keyup.enter)="projectTitleChanged()" [title]="boardService.selectedProject().title">
       <div>
         <button class="fa_icon_hover m-1" (click)="editProjectTitle()">
           <fa-icon [icon]="faPencil" size="sm"></fa-icon>
         </button>
-        @if (boardService.projects.length > 1) {
+        @if (boardService.projects().length > 1) {
           <button class="fa_icon_hover m-1" (click)="deleteProject()"
                   title="delete project">
             <fa-icon [icon]="faTrash" size="sm"></fa-icon>
@@ -44,7 +44,7 @@
       </div>
     </mat-toolbar>
     <div class="h-full sm:h-3/4">
-      <board [containers]="boardService.containers" [projectId]="boardService.selectedProject.id"></board>
+      <board></board>
     </div>
   </mat-sidenav-content>
 

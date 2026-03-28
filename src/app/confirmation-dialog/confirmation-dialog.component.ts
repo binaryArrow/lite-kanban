@@ -1,21 +1,21 @@
-import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from "@angular/core";
+import {Component, ElementRef, input, output, viewChild} from "@angular/core";
 
 @Component({
   selector: "confirmation-dialog",
   templateUrl: "./confirmation-dialog.component.html",
 })
 export class ConfirmationDialogComponent {
-  @Input() header: string = "Are you sure?";
-  @Output() confirmed = new EventEmitter<void>();
-  @Output() cancelled = new EventEmitter<void>();
-  @ViewChild("dialog") dialog!: ElementRef<HTMLDialogElement>;
+  header = input("Are you sure?");
+  confirmed = output();
+  cancelled = output();
+  dialog = viewChild.required<ElementRef<HTMLDialogElement>>("dialog");
 
   open() {
-    this.dialog.nativeElement.showModal();
+    this.dialog().nativeElement.showModal();
   }
 
   close() {
-    this.dialog.nativeElement.close();
+    this.dialog().nativeElement.close();
   }
 
   onConfirm() {
@@ -29,7 +29,7 @@ export class ConfirmationDialogComponent {
   }
 
   closeDialogWithClickOutside(event: MouseEvent) {
-    if (event.target === this.dialog.nativeElement) {
+    if (event.target === this.dialog().nativeElement) {
       this.onCancel();
     }
   }

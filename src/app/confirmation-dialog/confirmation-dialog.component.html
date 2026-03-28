@@ -1,7 +1,7 @@
 <dialog #dialog class="delete-dialog w-64 h-16 bg-container-hover overflow-hidden"
   (click)="closeDialogWithClickOutside($event)">
   <div>
-    <h3>{{ header }}</h3>
+    <h3>{{ header() }}</h3>
     <button class="bg-container-hover fa_icon_hover" (click)="onConfirm()">Yes</button>
     <button class="bg-container-hover fa_icon_hover m-2" (click)="onCancel()">No</button>
   </div>

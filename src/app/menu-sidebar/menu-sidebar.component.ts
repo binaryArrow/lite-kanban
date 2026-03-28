@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, inject, linkedSignal, OnInit, viewChild} from '@angular/core';
 import {MatSidenav, MatSidenavModule} from "@angular/material/sidenav";
 import {MatListModule} from "@angular/material/list";
 import {MatToolbarModule} from "@angular/material/toolbar";
@@ -29,47 +29,53 @@ import {BoardService} from "../services/board.service";
   styleUrl: './menu-sidebar.component.css'
 })
 export class MenuSidebarComponent implements OnInit {
-  @ViewChild('projectTitleInput') projectTitleInput!: ElementRef<HTMLInputElement>
-  @ViewChild('sidenav') sidenav!: MatSidenav
+  projectTitleInput = viewChild.required<ElementRef<HTMLInputElement>>('projectTitleInput');
+  sidenav = viewChild.required<MatSidenav>('sidenav');
   protected readonly faBars = faBars;
   protected readonly faTrash = faTrash;
   protected readonly faPencil = faPencil;
   protected readonly faGithub = faGithub;
   protected readonly faBug = faBug;
+  protected readonly faPlus = faPlus;
 
-  constructor(private dbService: DbService, public boardService: BoardService) {
-  }
+  private dbService = inject(DbService);
+  boardService = inject(BoardService);
+  selectedProjectTitle = linkedSignal(() => this.boardService.selectedProject().title);
 
   async ngOnInit() {
     await this.dbService.initDB()
-    this.boardService.projects = await this.dbService.getAllProjects()
-    this.boardService.selectedProject = this.boardService.projects[0]
-    this.boardService.containers = await this.dbService.getAllTicketContainers(this.boardService.selectedProject.id)
+    this.boardService.projects.set(await this.dbService.getAllProjects())
+    this.boardService.selectedProject.set(this.boardService.projects()[0])
+    this.boardService.containers.set(await this.dbService.getAllTicketContainers(this.boardService.selectedProject().id))
   }
 
   editProjectTitle() {
-    this.projectTitleInput.nativeElement.disabled = false
-    this.projectTitleInput.nativeElement.focus()
+    this.projectTitleInput().nativeElement.disabled = false
+    this.projectTitleInput().nativeElement.focus()
   }
 
   projectTitleChanged() {
-    this.dbService.putProject(this.boardService.selectedProject).then(() => {
-      this.projectTitleInput.nativeElement.disabled = true
+    const updatedProject = {...this.boardService.selectedProject(), title: this.selectedProjectTitle()};
+    this.boardService.selectedProject.set(updatedProject);
+    this.boardService.projects.update(projects =>
+      projects.map(project => project.id === updatedProject.id ? updatedProject : project)
+    );
+    this.dbService.putProject(updatedProject).then(() => {
+      this.projectTitleInput().nativeElement.disabled = true
     })
   }
 
   async selectProject(project: ProjectModel) {
-    this.boardService.selectedProject = project
-    this.boardService.containers = await this.dbService.getAllTicketContainers(this.boardService.selectedProject.id)
-    this.sidenav.toggle(false)
+    this.boardService.selectedProject.set(project)
+    this.boardService.containers.set(await this.dbService.getAllTicketContainers(this.boardService.selectedProject().id))
+    this.sidenav().toggle(false)
   }
 
-  protected readonly faPlus = faPlus;
 
   addNewProject() {
     this.dbService.addNewProject().then(res => {
       if (res) {
-        this.boardService.projects.push(res)
+        this.boardService.projects.update(projects => [...projects, res])
         this.selectProject(res)
       }
     })
@@ -78,9 +84,9 @@ export class MenuSidebarComponent implements OnInit {
 
   deleteProject() {
     if (confirm('Are you sure you want to delete this project?')) {
-      this.dbService.deleteProject(this.boardService.selectedProject.id).then(() => {
-        this.boardService.projects = this.boardService.projects.filter(project => project.id !== this.boardService.selectedProject.id)
-        this.selectProject(this.boardService.projects[0])
+      this.dbService.deleteProject(this.boardService.selectedProject().id).then(() => {
+        this.boardService.projects.update(projects => projects.filter(project => project.id !== this.boardService.selectedProject().id))
+        this.selectProject(this.boardService.projects()[0])
       })
     }
   }

@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnInit, signal, ViewChild} from "@angular/core";
+import {Component, ElementRef, inject, input, linkedSignal, OnInit, signal, viewChild} from "@angular/core";
 import {TicketContainerModel} from "../../models/TicketContainerModel";
 import {
   CdkDrag,
@@ -44,24 +44,20 @@ import {SeveritySettingsComponent} from "../severity-settings/severity-settigns/
   styleUrl: "./ticket-container.component.css",
 })
 export class TicketContainerComponent implements OnInit {
-  @Input() ticketContainers: TicketContainerModel[] = []
-  @Input() model: TicketContainerModel = {
+  ticketContainers = input<TicketContainerModel[]>([]);
+  model = input<TicketContainerModel>({
     title: "NEW",
     id: 0,
     projectId: 0,
-    order: this.ticketContainers.length,
-  };
-  @ViewChild("titleInput") titleInput!: ElementRef<HTMLInputElement>;
-  @ViewChild("ticketModal") ticketModal!: ElementRef<HTMLDialogElement>;
-  @ViewChild("deleteContainerDialog")
-  deleteContainerDialog!: ConfirmationDialogComponent;
-  @ViewChild("deleteImageDialog")
-  deleteImageDialog!: ConfirmationDialogComponent;
-  @ViewChild("clearTicketsDialog")
-  clearTicketsDialog!: ConfirmationDialogComponent;
-  @ViewChild("ticketTitleInput")
-  ticketTitleInput!: ElementRef<HTMLInputElement>;
-  @ViewChild("imageUpload") fileUpload!: ElementRef<HTMLInputElement>;
+    order: 0,
+  });
+  titleInput = viewChild.required<ElementRef<HTMLInputElement>>("titleInput");
+  ticketModal = viewChild.required<ElementRef<HTMLDialogElement>>("ticketModal");
+  deleteContainerDialog = viewChild.required<ConfirmationDialogComponent>("deleteContainerDialog");
+  deleteImageDialog = viewChild.required<ConfirmationDialogComponent>("deleteImageDialog");
+  clearTicketsDialog = viewChild.required<ConfirmationDialogComponent>("clearTicketsDialog");
+  ticketTitleInput = viewChild.required<ElementRef<HTMLInputElement>>("ticketTitleInput");
+  fileUpload = viewChild.required<ElementRef<HTMLInputElement>>("imageUpload");
 
   protected readonly faPlus = faPlus;
   protected readonly faEllipsisV = faEllipsisV;
@@ -70,37 +66,34 @@ export class TicketContainerComponent implements OnInit {
   protected readonly faArrowLeft = faArrowLeft;
   protected readonly faArrowRight = faArrowRight;
   protected readonly faGear = faGear;
-  protected showConfirmation = false;
-  tickets: TicketModel[] = [];
-  openTicket: TicketModel | undefined = {
-    id: 0,
-    containerId: 0,
-    title: "",
-    description: "",
-    index: 0,
-    createDate: "",
-    severity: '',
-  };
-  imageData: ImageModel[] = [];
-  deleteImageId: number = 0;
-  openSeveritySettings = signal(false)
+  protected showConfirmation = signal(false);
+  tickets = signal<TicketModel[]>([]);
+  openTicket = signal<TicketModel | undefined>(undefined);
+  containerTitle = linkedSignal(() => this.model().title);
+  openTicketTitle = linkedSignal(() => this.openTicket()?.title ?? '');
+  openTicketDescription = linkedSignal(() => this.openTicket()?.description ?? '');
+  openTicketSeverity = linkedSignal(() => this.openTicket()?.severity ?? '');
+  imageData = signal<ImageModel[]>([]);
+  deleteImageId = signal(0);
+  openSeveritySettings = signal(false);
 
-
-  constructor(public dbService: DbService, public boardService: BoardService) {}
+  dbService = inject(DbService);
+  boardService = inject(BoardService);
 
   async ngOnInit() {
-    this.tickets = await this.dbService.getTicketsForContainer(this.model.id);
-    this.tickets.sort((a, b) => a.index - b.index);
+    const tickets = await this.dbService.getTicketsForContainer(this.model().id);
+    tickets.sort((a, b) => a.index - b.index);
+    this.tickets.set(tickets);
   }
 
   async showModal(event: { show: boolean; ticketId: number }) {
     if (event.show) {
-      this.openTicket = this.tickets.find(
+      this.openTicket.set(this.tickets().find(
         (ticket) => ticket.id === event.ticketId,
-      );
+      ));
       await this.setImages(event.ticketId);
-      this.ticketModal.nativeElement.showModal();
-      this.ticketTitleInput.nativeElement.blur();
+      this.ticketModal().nativeElement.showModal();
+      this.ticketTitleInput().nativeElement.blur();
     }
   }
 
@@ -119,82 +112,102 @@ export class TicketContainerComponent implements OnInit {
         event.currentIndex,
       );
     }
-    this.tickets.forEach(async (ticket, index) => {
+    // Trigger signal update after CDK mutation
+    this.tickets.update(ticket => [...ticket]);
+    this.tickets().forEach(async (ticket, index) => {
       ticket.index = index;
-      ticket.containerId = this.model.id;
+      ticket.containerId = this.model().id;
       await this.dbService.putTicket(ticket);
     });
   }
 
   addNewTicket() {
     this.dbService
-      .addNewTicket(this.model.id, this.tickets.length)
+      .addNewTicket(this.model().id, this.tickets().length)
       .then(async (response) => {
         const newTicket = response as TicketModel;
-        this.tickets.unshift(newTicket);
-        for (let i = 1; i < this.tickets.length; i++) {
-          this.tickets[i].index = i;
-          await this.dbService.putTicket(this.tickets[i]);
+        this.tickets.update(tickets => {
+          const updated = [newTicket, ...tickets];
+          updated.forEach((ticket, index) => ticket.index = index);
+          return updated;
+        });
+        for (let i = 1; i < this.tickets().length; i++) {
+          await this.dbService.putTicket(this.tickets()[i]);
         }
         await this.showModal({show: true, ticketId: newTicket.id});
       });
   }
 
   modelChanged() {
-    this.ticketContainers = this.ticketContainers.sort((a, b) => a.order - b.order);
-    this.dbService.putTicketContainer(this.model).then()
-    this.titleInput.nativeElement.blur()
+    const updatedModel = {...this.model(), title: this.containerTitle()};
+    this.boardService.containers.update(containers =>
+      containers.map(container => container.id === updatedModel.id ? updatedModel : container).sort((a, b) => a.order - b.order)
+    );
+    this.dbService.putTicketContainer(updatedModel).then();
+    this.titleInput().nativeElement.blur();
   }
 
   saveTicket() {
-    if (this.openTicket) {
-      this.dbService.putTicket(this.openTicket).then();
+    const ticket = this.openTicket();
+    if (ticket) {
+      const updated: TicketModel = {
+        ...ticket,
+        title: this.openTicketTitle(),
+        description: this.openTicketDescription(),
+        severity: this.openTicketSeverity(),
+      };
+      this.openTicket.set(updated);
+      this.tickets.update(tickets => tickets.map(t => t.id === updated.id ? updated : t));
+      this.dbService.putTicket(updated).then();
     }
   }
 
   closeTicketModal() {
-    this.ticketModal.nativeElement.close();
-    this.showConfirmation = false;
+    this.ticketModal().nativeElement.close();
+    this.showConfirmation.set(false);
   }
 
   deleteTicket() {
-    if (this.openTicket) {
-      const foundInTickets = this.tickets.find(
-        (ticket) => ticket.id === this.openTicket!!.id,
+    const ticket = this.openTicket();
+    if (ticket) {
+      const foundInTickets = this.tickets().find(
+        (t) => t.id === ticket.id,
       );
       if (foundInTickets) {
-        this.dbService.deleteTicket(this.openTicket.id).then(() => {
-          this.tickets?.splice(this.tickets.indexOf(foundInTickets), 1);
-          this.closeTicketModal()
+        this.dbService.deleteTicket(ticket.id).then(() => {
+          this.tickets.update(tickets => tickets.filter(t => t.id !== foundInTickets.id));
+          this.closeTicketModal();
         });
       }
     }
   }
 
   showContainerDeleteConfirmation() {
-    this.deleteContainerDialog.open();
+    this.deleteContainerDialog().open();
   }
 
   showImageDeleteConfirmation(id: number) {
-    this.deleteImageId = id;
-    this.deleteImageDialog.open();
+    this.deleteImageId.set(id);
+    this.deleteImageDialog().open();
   }
 
   protected showClearTicketsConfirmation() {
-    this.clearTicketsDialog.open();
+    this.clearTicketsDialog().open();
   }
 
   async clearTickets() {
-    for (const ticket of this.tickets) {
+    for (const ticket of this.tickets()) {
       await this.dbService.deleteTicket(ticket.id);
     }
-    this.tickets = [];
+    this.tickets.set([]);
   }
 
   async deleteContainer() {
-    this.dbService.deleteTicketContainer(this.model.id).then(() => {
-      this.ticketContainers.splice(this.ticketContainers.indexOf(this.model), 1)
-    })
+    this.dbService.deleteTicketContainer(this.model().id).then(() => {
+      this.boardService.containers.update(containers =>
+        containers.filter(container => container.id !== this.model().id)
+      );
+    });
   }
 
   closeDialogWithClickOutside(event: MouseEvent, element: HTMLDialogElement) {
@@ -204,24 +217,24 @@ export class TicketContainerComponent implements OnInit {
   }
 
   triggerImageUpload() {
-    this.fileUpload.nativeElement.click();
+    this.fileUpload().nativeElement.click();
   }
 
   uploadImage() {
-    const files = this.fileUpload.nativeElement.files;
+    const files = this.fileUpload().nativeElement.files;
     if (files) {
       for (let i = 0; i < files.length; i++) {
         const reader = new FileReader();
         reader.readAsDataURL(files[i]);
         reader.onload = () => {
           this.dbService
-            .addNewImage(reader.result!!.toString(), this.openTicket!!.id)
+            .addNewImage(reader.result!!.toString(), this.openTicket()!!.id)
             .then(async () => {
-              await this.setImages(this.openTicket!!.id);
+              await this.setImages(this.openTicket()!!.id);
             });
         };
       }
-      this.fileUpload.nativeElement.value = "";
+      this.fileUpload().nativeElement.value = "";
     }
   }
 
@@ -230,15 +243,16 @@ export class TicketContainerComponent implements OnInit {
   }
 
   async setImages(ticketId: number) {
-    this.imageData = await this.dbService.getAllImagesFromTickets(ticketId);
-    if (this.imageData.length > 0) {
-      this.imageData.forEach((image) => {
+    const images = await this.dbService.getAllImagesFromTickets(ticketId);
+    if (images.length > 0) {
+      images.forEach((image) => {
         this.base64toBlob(image.imageBase64String).then((res) => {
           image.imageURL = URL.createObjectURL(res);
         });
       });
+      this.imageData.set(images);
     } else {
-      this.imageData = [];
+      this.imageData.set([]);
     }
   }
 
@@ -247,9 +261,9 @@ export class TicketContainerComponent implements OnInit {
   }
 
   deleteImage() {
-    this.dbService.deleteImage(this.deleteImageId).then(async () => {
-      this.imageData = this.imageData.filter(
-        (image) => image.id !== this.deleteImageId,
+    this.dbService.deleteImage(this.deleteImageId()).then(async () => {
+      this.imageData.update(images =>
+        images.filter((image) => image.id !== this.deleteImageId())
       );
     });
   }

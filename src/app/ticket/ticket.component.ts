@@ -1,4 +1,4 @@
-import {Component, EventEmitter, inject, Input, Output} from '@angular/core';
+import {Component, computed, inject, input, output} from '@angular/core';
 import {TicketModel} from "../../models/TicketModel";
 import {FormsModule} from "@angular/forms";
 import { DbService } from "../services/db.service";
@@ -12,17 +12,17 @@ import { DbService } from "../services/db.service";
   styleUrl: './ticket.component.css'
 })
 export class TicketComponent {
-  @Input() ticketModel: TicketModel = {} as TicketModel
-  @Output() showModalEvent = new EventEmitter<{ show: boolean, ticketId: number }>()
-  dbService = inject(DbService)
+  ticketModel = input<TicketModel>({} as TicketModel);
+  showModalEvent = output<{ show: boolean, ticketId: number }>();
+  dbService = inject(DbService);
 
-  get severityIndicator() {
-    const severity = this.dbService.severities().filter(severity => severity.name === this.ticketModel.severity)[0]
-    return severity ? `background-color: ${severity.color}` : ''
-  }
+  severityIndicator = computed(() => {
+    const severity = this.dbService.severities().filter(severity => severity.name === this.ticketModel().severity)[0];
+    return severity ? `background-color: ${severity.color}` : '';
+  });
 
   showModal() {
-    this.showModalEvent.emit({show: true, ticketId: this.ticketModel.id})
+    this.showModalEvent.emit({show: true, ticketId: this.ticketModel().id});
   }
 
 }

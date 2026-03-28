@@ -12,8 +12,8 @@ import {ConfigModel, SeverityConfig} from "../../models/ConfigModel";
   providedIn: 'root'
 })
 export class DbService {
-  db: any;
-  DB_VERSION = 5;
+  private db!: IDBPDatabase;
+  private readonly DB_VERSION = 5;
   severities = signal<SeverityConfig[]>([]);
 
   async initDB() {

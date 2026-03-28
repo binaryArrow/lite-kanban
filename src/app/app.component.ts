@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {RouterOutlet} from '@angular/router';
 import {MenuSidebarComponent} from "./menu-sidebar/menu-sidebar.component";
 import {UpdatesService} from "./services/updates.service";
@@ -10,11 +10,10 @@ import {UpdatesService} from "./services/updates.service";
     styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'canban2';
+  readonly title = 'canban2';
+  private updateService = inject(UpdatesService);
 
-  constructor(
-    private updateService: UpdatesService
-  ) {
+  constructor() {
     navigator.storage.persist().then(r => {
       if (r) {
         console.info('Storage is persisted')

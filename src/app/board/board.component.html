@@ -1,8 +1,8 @@
 <div class="flex h-full flex-nowrap w-auto overflow-x-auto" cdkDropListGroup>
-  @for(container of containers; track container.id){
-  <ticket-container [model]="container" [ticketContainers]="containers"></ticket-container>
+  @for(container of boardService.containers(); track container.id){
+  <ticket-container [model]="container" [ticketContainers]="boardService.containers()"></ticket-container>
   }
-  <button class="h-2/3 sm:h-full bg-container hover:bg-container-hover rounded p-0.5 ml-5 mr-5 text-center" (click)="addNewContainer(projectId)">
+  <button class="h-2/3 sm:h-full bg-container hover:bg-container-hover rounded p-0.5 ml-5 mr-5 text-center" (click)="addNewContainer()">
     <fa-icon [icon]="faPlus"/>
   </button>
 </div>

@@ -1,6 +1,6 @@
 <div
   cdkDropList
-  [cdkDropListData]="tickets"
+  [cdkDropListData]="tickets()"
   class="ticket-container h-2/3 sm:h-full w-72 bg-container ml-5 rounded overflow-auto"
   (cdkDropListDropped)="drop($event)">
   <div class="flex sticky top-0 z-10 bg-container mb-2">
@@ -13,20 +13,20 @@
         Clear tickets
       </button>
       <div class="flex">
-        <button title="Move the Container to the left" [disabled]="model.order <= 0" mat-menu-item
-                (click)="boardService.moveContainer(model)">
+        <button title="Move the Container to the left" [disabled]="model().order <= 0" mat-menu-item
+                (click)="boardService.moveContainer(model())">
           <fa-icon [icon]="faArrowLeft"></fa-icon>
         </button>
-        <button title="Move the Container to the right" [disabled]="model.order+1 >= ticketContainers.length"
+        <button title="Move the Container to the right" [disabled]="model().order+1 >= ticketContainers().length"
                 mat-menu-item
-                (click)="boardService.moveContainer(model, 'right')">
+                (click)="boardService.moveContainer(model(), 'right')">
           <fa-icon [icon]="faArrowRight"></fa-icon>
         </button>
       </div>
     </mat-menu>
     <input (keyup.enter)="modelChanged()" #titleInput
            class="title_input border-b-2 bg-container focus:outline-none border-container-hover2 focus:border-container-hover3"
-           (focusout)="modelChanged()" type="text" [(ngModel)]="model.title">
+           (focusout)="modelChanged()" type="text" [(ngModel)]="containerTitle">
   </div>
   <confirmation-dialog
     #deleteContainerDialog
@@ -47,7 +47,7 @@
     <button class="m-2 hover:bg-container-hover rounded text-center" (click)="addNewTicket()">
       <fa-icon [icon]="faPlus"></fa-icon>
     </button>
-    @for (ticket of tickets; track ticket.id) {
+    @for (ticket of tickets(); track ticket.id) {
       <ticket (showModalEvent)="showModal($event)" class="ticket-wrapper" [ticketModel]="ticket" cdkDrag></ticket>
     }
   </div>
@@ -59,21 +59,21 @@
              class="ml-3 mb-2 mr-3 border-b-2 bg-container focus:outline-none border-container-hover2 focus:border-container-hover3 col-span-2 text-center"
              spellcheck="false"
              (focusout)="saveTicket()" (keyup.enter)="saveTicket()"
-             [(ngModel)]="openTicket!!.title">
+             [ngModel]="openTicketTitle()" (ngModelChange)="openTicketTitle.set($event)">
       <textarea
         class="col-start-1 col-span-2 m-3 col bg-container-hover outline-none rounded p-2 border-b-2 focus:outline-none border-container-hover2
          focus:border-container-hover3 h-80 sm:h-156.25" spellcheck="false"
-        [(ngModel)]="openTicket!!.description" (focusout)="saveTicket()"></textarea>
+        [ngModel]="openTicketDescription()" (ngModelChange)="openTicketDescription.set($event)" (focusout)="saveTicket()"></textarea>
       <div class="flex flex-col justify-between">
         <div class="p-1">
           <div class="text-start">
-            Creation: {{ openTicket!!.createDate }}
+            Creation: {{ openTicket()?.createDate }}
           </div>
           <div class="text-start">
             <div>
               <label for="severity">Severity </label>
               <select id="severity" class="mt-5 bg-container-hover hover:cursor-pointer"
-                      [(ngModel)]="openTicket!!.severity"
+                      [ngModel]="openTicketSeverity()" (ngModelChange)="openTicketSeverity.set($event)"
                       (change)="saveTicket()">
                 @for (severity of dbService.severities(); track severity) {
                   <option [value]="severity.name">{{ severity.name }}</option>
@@ -96,7 +96,7 @@
           </div>
         </div>
         <div class="flex flex-wrap h-80 overflow-auto">
-          @for (image of imageData; track image.id) {
+          @for (image of imageData(); track image.id) {
             <div>
               <button class="ml-2 float-right fa_icon_hover" (click)="showImageDeleteConfirmation(image.id)"
                       title="Delete Image">
@@ -108,19 +108,19 @@
           }
         </div>
         <div class="text-right">
-          <button class="fa_icon_hover mb-2 mr-2" (click)="showConfirmation = true"
+          <button class="fa_icon_hover mb-2 mr-2" (click)="showConfirmation.set(true)"
                   title="Delete Ticket">
             <fa-icon [icon]="faTrash"/>
           </button>
         </div>
       </div>
     </div>
-    @if (showConfirmation) {
+    @if (showConfirmation()) {
       <div class="confirm_dialog bg-container-hover absolute bottom-3 right-10">
         Delete Ticket?
         <div>
           <button class="bg-container-hover fa_icon_hover" (click)="deleteTicket()">Yes</button>
-          <button class="bg-container-hover fa_icon_hover m-2" (click)="showConfirmation = false">No</button>
+          <button class="bg-container-hover fa_icon_hover m-2" (click)="showConfirmation.set(false)">No</button>
         </div>
       </div>
     }
