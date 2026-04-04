@@ -1,8 +1,8 @@
-<div class="flex h-full flex-nowrap w-auto overflow-x-auto" cdkDropListGroup>
+<div class="flex flex-nowrap w-auto items-stretch" cdkDropListGroup>
   @for(container of boardService.containers(); track container.id){
   <ticket-container [model]="container" [ticketContainers]="boardService.containers()"></ticket-container>
   }
-  <button data-testid="add-container-btn" class="h-2/3 sm:h-full bg-container hover:bg-container-hover rounded p-0.5 ml-5 mr-5 text-center" (click)="addNewContainer()">
+  <button data-testid="add-container-btn" class="self-stretch bg-container hover:bg-container-hover rounded p-0.5 ml-5 mr-5 mb-3 text-center" (click)="addNewContainer()">
     <fa-icon [icon]="faPlus"/>
   </button>
 </div>
