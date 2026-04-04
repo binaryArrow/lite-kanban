@@ -1,7 +1,7 @@
 <div
   cdkDropList
   [cdkDropListData]="tickets()"
-  class="ticket-container w-72 bg-container ml-5 rounded mb-3 flex-1"
+  class="ticket-container bg-container ml-5 rounded mb-3 flex-1"
   (cdkDropListDropped)="drop($event)">
   <div class="flex sticky top-0 z-10 bg-container mb-2 rounded-t">
     <button class="fa_icon_hover p-2" [matMenuTriggerFor]="menu">
@@ -63,7 +63,8 @@
       <textarea
         class="col-start-1 col-span-2 m-3 col bg-container-hover outline-none rounded p-2 border-b-2 focus:outline-none border-container-hover2
          focus:border-container-hover3 h-80 sm:h-156.25" spellcheck="false"
-        [ngModel]="openTicketDescription()" (ngModelChange)="openTicketDescription.set($event)" (focusout)="saveTicket()"></textarea>
+        [ngModel]="openTicketDescription()" (ngModelChange)="openTicketDescription.set($event)"
+        (focusout)="saveTicket()"></textarea>
       <div class="flex flex-col justify-between">
         <div class="p-1">
           <div class="text-start">

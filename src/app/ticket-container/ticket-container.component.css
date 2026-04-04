@@ -1,5 +1,7 @@
 :host {
   display: flex;
+  flex: 1 0 250px;
+  max-width: 340px;
 }
 
 .cdk-drag-animating {
