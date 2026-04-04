@@ -1,4 +1,4 @@
-<div class="flex flex-nowrap w-auto items-stretch" cdkDropListGroup>
+<div class="flex min-h-[75vh] flex-nowrap w-auto items-stretch" cdkDropListGroup>
   @for(container of boardService.containers(); track container.id){
   <ticket-container [model]="container" [ticketContainers]="boardService.containers()"></ticket-container>
   }
