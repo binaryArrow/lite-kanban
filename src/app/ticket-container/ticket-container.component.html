@@ -25,8 +25,8 @@
       </div>
     </mat-menu>
     <input (keyup.enter)="modelChanged()" #titleInput
-           class="title_input border-b-2 bg-container focus:outline-none border-container-hover2 focus:border-container-hover3"
-           (focusout)="modelChanged()" type="text" [(ngModel)]="containerTitle">
+           class="title_input border-b-2 bg-container focus:outline-none border-container-hover2 focus:border-container-hover3 truncate"
+           (focusout)="modelChanged()" type="text" [(ngModel)]="containerTitle" [title]="containerTitle()">
   </div>
   <confirmation-dialog
     #deleteContainerDialog
