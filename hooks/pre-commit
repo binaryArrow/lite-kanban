@@ -10,6 +10,7 @@ then
 	against=HEAD
 else
 	# Initial commit: diff against an empty tree object
+	# shellcheck disable=SC2034
 	against=$(git hash-object -t tree /dev/null)
 fi
 
