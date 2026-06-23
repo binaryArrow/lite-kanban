@@ -21,7 +21,7 @@
     "@angular/platform-browser-dynamic": "^22.0.2",
     "@angular/router": "^22.0.2",
     "@angular/service-worker": "^22.0.2",
-    "@fortawesome/angular-fontawesome": "^4.0.0",
+    "@fortawesome/angular-fontawesome": "^5.0.0",
     "@fortawesome/fontawesome-svg-core": "^7.2.0",
     "@fortawesome/free-brands-svg-icons": "^7.2.0",
     "@fortawesome/free-solid-svg-icons": "^7.2.0",
@@ -37,7 +37,7 @@
     "@angular/cli": "^22.0.3",
     "@angular/compiler-cli": "^22.0.2",
     "autoprefixer": "^10.4.27",
-    "postcss": "^8.5.3",
+    "postcss": "8.5.10",
     "tailwindcss": "^4.2.2",
     "typescript": "~6.0.3",
     "vitest": "^4.1.2"

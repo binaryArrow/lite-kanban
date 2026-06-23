@@ -12,6 +12,7 @@ import {UpdatesService} from "./services/updates.service";
 })
 export class AppComponent {
   readonly title = 'canban2';
+  //@ts-ignore
   private updateService = inject(UpdatesService);
 
   constructor() {
