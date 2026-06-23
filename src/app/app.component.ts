@@ -4,15 +4,15 @@ import {MenuSidebarComponent} from "./menu-sidebar/menu-sidebar.component";
 import {UpdatesService} from "./services/updates.service";
 
 @Component({
-    selector: 'app-root',
-    imports: [RouterOutlet, MenuSidebarComponent],
-    templateUrl: './app.component.html',
-    changeDetection: ChangeDetectionStrategy.Eager,
-    styleUrl: './app.component.css'
+  selector: 'app-root',
+  imports: [RouterOutlet, MenuSidebarComponent],
+  templateUrl: './app.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrl: './app.component.css'
 })
 export class AppComponent {
   readonly title = 'canban2';
-  //@ts-ignore
+  // eslint-disable-next-line
   private updateService = inject(UpdatesService);
 
   constructor() {
