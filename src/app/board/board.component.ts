@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, ChangeDetectionStrategy} from '@angular/core';
 import {TicketContainerComponent} from "../ticket-container/ticket-container.component";
 import {CdkDropListGroup} from "@angular/cdk/drag-drop";
 import {DbService} from "../services/db.service";
@@ -14,6 +14,7 @@ import {BoardService} from "../services/board.service";
     FontAwesomeModule
   ],
   templateUrl: './board.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './board.component.css'
 })
 export class BoardComponent {

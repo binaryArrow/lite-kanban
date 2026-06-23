@@ -1,4 +1,4 @@
-import {Component, computed, inject, input, output} from '@angular/core';
+import {Component, computed, inject, input, output, ChangeDetectionStrategy} from '@angular/core';
 import {TicketModel} from "../../models/TicketModel";
 import {FormsModule} from "@angular/forms";
 import { DbService } from "../services/db.service";
@@ -9,6 +9,7 @@ import { DbService } from "../services/db.service";
     FormsModule,
   ],
   templateUrl: './ticket.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './ticket.component.css'
 })
 export class TicketComponent {

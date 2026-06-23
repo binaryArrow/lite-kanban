@@ -1,7 +1,8 @@
-import {Component, ElementRef, input, output, viewChild} from "@angular/core";
+import {Component, ElementRef, input, output, viewChild, ChangeDetectionStrategy} from "@angular/core";
 
 @Component({
   selector: "confirmation-dialog",
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: "./confirmation-dialog.component.html",
 })
 export class ConfirmationDialogComponent {

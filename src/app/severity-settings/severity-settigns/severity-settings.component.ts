@@ -5,6 +5,7 @@ import {
   inject,
   model,
   viewChild,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import {DbService} from "../../services/db.service";
 import {SeverityConfig} from "../../../models/ConfigModel";
@@ -13,6 +14,7 @@ import {SeverityConfig} from "../../../models/ConfigModel";
   selector: 'app-severity-settigns',
   imports: [],
   templateUrl: './severity-settings.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './severity-settings.component.css',
 })
 export class SeveritySettingsComponent {

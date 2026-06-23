@@ -1,4 +1,4 @@
-import {Component, ElementRef, inject, linkedSignal, OnInit, viewChild} from '@angular/core';
+import {Component, ElementRef, inject, linkedSignal, OnInit, viewChild, ChangeDetectionStrategy} from '@angular/core';
 import {MatSidenav, MatSidenavModule} from "@angular/material/sidenav";
 import {MatListModule} from "@angular/material/list";
 import {MatToolbarModule} from "@angular/material/toolbar";
@@ -26,6 +26,7 @@ import {BoardService} from "../services/board.service";
     FormsModule,
   ],
   templateUrl: './menu-sidebar.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './menu-sidebar.component.css'
 })
 export class MenuSidebarComponent implements OnInit {

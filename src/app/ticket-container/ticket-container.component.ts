@@ -1,4 +1,4 @@
-import {Component, ElementRef, inject, input, linkedSignal, OnInit, signal, viewChild} from "@angular/core";
+import {Component, ElementRef, inject, input, linkedSignal, OnInit, signal, viewChild, ChangeDetectionStrategy} from "@angular/core";
 import {TicketContainerModel} from "../../models/TicketContainerModel";
 import {
   CdkDrag,
@@ -41,6 +41,7 @@ import {SeveritySettingsComponent} from "../severity-settings/severity-settigns/
     SeveritySettingsComponent,
   ],
   templateUrl: "./ticket-container.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./ticket-container.component.css",
 })
 export class TicketContainerComponent implements OnInit {

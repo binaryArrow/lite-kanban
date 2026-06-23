@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, ChangeDetectionStrategy} from '@angular/core';
 import {RouterOutlet} from '@angular/router';
 import {MenuSidebarComponent} from "./menu-sidebar/menu-sidebar.component";
 import {UpdatesService} from "./services/updates.service";
@@ -7,6 +7,7 @@ import {UpdatesService} from "./services/updates.service";
     selector: 'app-root',
     imports: [RouterOutlet, MenuSidebarComponent],
     templateUrl: './app.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './app.component.css'
 })
 export class AppComponent {
