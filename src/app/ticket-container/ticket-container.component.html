@@ -1,8 +1,5 @@
 <div
-  cdkDropList
-  [cdkDropListData]="tickets()"
-  class="ticket-container bg-container ml-5 rounded mb-3 flex-1"
-  (cdkDropListDropped)="drop($event)">
+  class="ticket-container bg-container ml-5 rounded mb-3 h-[75vh] flex flex-1 flex-col overflow-hidden">
   <div class="flex sticky top-0 z-10 bg-container mb-2 rounded-t">
     <button class="fa_icon_hover p-2" [matMenuTriggerFor]="menu">
       <fa-icon [icon]="faEllipsisV"/>
@@ -43,7 +40,11 @@
     header="Clear all tickets?"
     (confirmed)="clearTickets()">
   </confirmation-dialog>
-  <div>
+  <div
+    cdkDropList
+    [cdkDropListData]="tickets()"
+    class="min-h-0 flex-1 overflow-y-auto"
+    (cdkDropListDropped)="drop($event)">
     <button class="m-2 hover:bg-container-hover rounded text-center" (click)="addNewTicket()">
       <fa-icon [icon]="faPlus"></fa-icon>
     </button>
@@ -61,7 +62,7 @@
              (focusout)="saveTicket()" (keyup.enter)="saveTicket()"
              [ngModel]="openTicketTitle()" (ngModelChange)="openTicketTitle.set($event)">
       <textarea
-        class="col-start-1 col-span-2 m-3 col bg-container-hover outline-none rounded p-2 border-b-2 focus:outline-none border-container-hover2
+        class="col-start-1 col-span-2 m-3 col bg-container-hover outline-none rounded p-2 border-b-2 border-container-hover2
          focus:border-container-hover3 h-80 sm:h-156.25" spellcheck="false"
         [ngModel]="openTicketDescription()" (ngModelChange)="openTicketDescription.set($event)"
         (focusout)="saveTicket()"></textarea>
